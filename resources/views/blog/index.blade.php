@@ -44,14 +44,21 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="nama_kegiatan">Nama Bidan</label>
-            <input autocomplete="off" type="text" class="form-control @error('nama_kegiatan') is-invalid @enderror" name="nama_kegiatan"  id="nama_kegiatan	" value="{{ old('nama_kegiatan') }}">
-            @error('nama_kegiatan')
-            <div class="invalid-feedback">
-                {{$message}}
-            </div>
-            @enderror
-        </div>
+    <label for="bidan_id">Nama Bidan</label>
+    <select name="bidan_id" id="bidan_id" class="form-control @error('bidan_id') is-invalid @enderror">
+        <option value="">-- Pilih Bidan --</option>
+        @foreach($bidans as $bidan)
+            <option value="{{ $bidan->id }}" data-nama="{{ $bidan->nama_lengkap }}">{{ $bidan->nama_lengkap }}</option>
+        @endforeach
+    </select>
+    <input type="hidden" name="nama_kegiatan" id="nama_kegiatan" value="">
+    @error('bidan_id')
+    <div class="invalid-feedback">
+        {{ $message }}
+    </div>
+    @enderror
+</div>
+
         <div class="form-group">
             <label for="waktu">Jam Pelayanan</label>
             <input autocomplete="off" placeholder="00:00" type="text" class="form-control @error('waktu') is-invalid @enderror" name="waktu"  id="waktu	" value="{{ old('waktu') }}">
@@ -107,4 +114,19 @@
 
   </div>
 </div>
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const bidanSelect = document.getElementById('bidan_id');
+        const namaKegiatanInput = document.getElementById('nama_kegiatan');
+
+        bidanSelect.addEventListener('change', function () {
+            const selectedOption = this.options[this.selectedIndex];
+            const nama = selectedOption.getAttribute('data-nama');
+            namaKegiatanInput.value = nama || '';
+        });
+    });
+</script>
+@endpush
+
 @endsection

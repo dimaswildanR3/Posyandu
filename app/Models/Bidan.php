@@ -5,23 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Jadwal extends Model
+class Bidan extends Model
 {
     use HasFactory;
-    protected $table= 'jadwals';
+
+    protected $table = 'bidans';
+
     protected $fillable = [
-        'nama_kegiatan',
-        'tanggal_kegiatan',
-        'waktu',
-        'bidan_id',
+        'nama_lengkap',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'no_hp',
+        'pendidikan_terakhir',
         'user_id',
     ];
 
-    public function user(){
+    // Relasi ke User
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    public function bidan()
-{
-    return $this->belongsTo(Bidan::class);
-}
 }

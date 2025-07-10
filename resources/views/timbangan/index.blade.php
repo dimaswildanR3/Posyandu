@@ -102,6 +102,41 @@
         </div>
     @endif
 </div>
+<div class="mt-4 p-3 border rounded bg-light">
+    <form action="{{ url('/filter/periodeTimbang') }}" method="get" class="row g-3 align-items-end">
+        <!-- <div class="col-md-3">
+            <label for="dari" class="form-label">Dari</label>
+            <input type="text" name="dari" class="form-control dateselect" autocomplete="off" value="{{ $dari }}" id="dari">
+        </div>
+        <div class="col-md-3">
+            <label for="sampai" class="form-label">Sampai</label>
+            <input type="text" name="sampai" class="form-control dateselect" autocomplete="off" value="{{ $sampai }}" id="sampai">
+        </div> -->
+        <div class="col-md-4">
+            <label for="selectBalita" class="form-label">Nama Balita</label>
+            <select name="balita_id" id="selectBalita" class="form-select @error('balita_id') is-invalid @enderror">
+                @foreach ($balita as $option)
+                    <option value="{{ $option->id }}">{{ $option->nama_balita }}</option>
+                @endforeach
+            </select>
+            @error('balita_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+        <!-- <div class="col-md-2 d-grid">
+            <button type="submit" class="btn btn-outline-secondary w-100">
+                <i class="fas fa-search"></i> Cari
+            </button>
+        </div> -->
+    </form>
+
+    <div class="mt-3 text-end">
+        <a href="#" id="lihatKMS" class="btn btn-info" target="_blank">
+            <i class="fas fa-file-alt"></i> Lihat KMS
+        </a>
+    </div>
+</div>
+<br><br>
 <div style="padding-bottom:200px">
     <div class="card shadow p-3 mb-5 bg-white rounded border-left-primary">
         <div class="table-responsive">
@@ -179,13 +214,30 @@
             </tbody>
         </table>
         </div>
+        
     </div>
+    <!-- Setelah tabel dan pagination -->
+
+
 </div>
+
 
 @endsection
 
 @section('footer')
-    
+<script>
+    $(document).ready(function(){
+        $('#selectBalita').on('change', function(){
+            let balitaId = $(this).val();
+            $('#lihatKMS').attr('href', '/kms/' + balitaId);
+        });
+
+        // Set default href saat halaman pertama kali dibuka
+        let defaultId = $('#selectBalita').val();
+        $('#lihatKMS').attr('href', '/kms/' + defaultId);
+    });
+</script>
+
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script>
     Highcharts.chart('chartNilai1', {

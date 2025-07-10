@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jadwal;
+use App\Models\Bidan;
 use App\Models\Penimbangan;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,9 @@ class BlogController extends Controller
     public function index()
     {
         $jadwal = Jadwal::all();
-        return view('blog.index',compact('jadwal'));
+        $bidans = Bidan::all();
+     
+    return view('blog.index', compact('jadwal', 'bidans'));
     }
 
     /**
@@ -40,13 +43,23 @@ class BlogController extends Controller
     {
         $request->validate([
             'tanggal_kegiatan'=>'required',
-            'nama_kegiatan'=>'required',
+            'bidan_id'=>'required|exists:bidans,id',
             'waktu'=>'required'
         ]);
+    
+        $bidan = \App\Models\Bidan::find($request->bidan_id);
         
-        $blog = Jadwal::create($request->all());
+        Jadwal::create([
+            'user_id' => $request->user_id,
+            'bidan_id' => $bidan->id,
+            'nama_kegiatan' => $bidan->nama_lengkap,
+            'tanggal_kegiatan' => $request->tanggal_kegiatan,
+            'waktu' => $request->waktu,
+        ]);
+    
         return redirect('/blog')->with('status','Data Jadwal Pelayanan berhasil ditambahkan!');
     }
+    
 
     /**
      * Display the specified resource.

@@ -72,6 +72,7 @@ class BalitaController extends Controller
                     'tpt_lahir'=>$request->tpt_lahir,
                     'tgl_lahir'=>$request->tgl_lahir,
                     'orang_tua_id'=>$request->orang_tua_id,
+                    'nik_anak'=>$request->nik_anak,
         
                     'ket'=>$request->ket,
                     'jenis_kelamin'=>$request->jenis_kelamin,

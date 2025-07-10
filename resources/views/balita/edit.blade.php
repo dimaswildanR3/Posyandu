@@ -18,7 +18,17 @@
             <form action="/balita/{{$balita->id}}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('patch')
-                <div class="form-group">
+                    {{-- NIK Anak --}}
+                    <div class="form-group">
+                        <label for="nik_anak">NIK Anak</label>
+                        <input type="text" class="form-control @error('nik_anak') is-invalid @enderror" name="nik_anak" id="nik_anak" value="{{ old('nik_anak', $balita->nik_anak) }}">
+                        @error('nik_anak')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    {{-- Nama Anak --}}
+                    <div class="form-group">
                     <label for="nama">Nama Anak</label>
                     <input type="text" class="form-control @error('nama_balita') is-invalid @enderror" name="nama_balita"  id="nama_balita" value="{{ $balita->nama_balita }}">
                     @error('nama_balita')
@@ -74,7 +84,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group mt-2">
+                <!-- <div class="form-group mt-2">
                     <label for="ket">Keterangan</label>
                     <textarea type="text" class="form-control @error('ket') is-invalid @enderror" name="ket"  id="nama" value="">{{ $balita->ket }}</textarea>
                     @error('ket')
@@ -82,7 +92,7 @@
                         {{$message}}
                     </div>
                     @enderror
-                </div>
+                </div> -->
                 <button type="submit" class="btn btn-outline-success">Simpan</button>
             </form>
         </div>

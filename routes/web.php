@@ -9,6 +9,8 @@ use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\KeuanganController;
 use App\Http\Controllers\ImunisasiController;
 use App\Http\Controllers\OrangTuaController;
+use App\Http\Controllers\PetugasController;
+use App\Http\Controllers\BidanController;
 use App\Http\Controllers\PenimbanganController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -41,7 +43,11 @@ Route::resource('/orangtua' ,OrangTuaController::class);
 Route::resource('/penimbangan' ,PenimbanganController::class);
 Route::resource('/keuangan' ,KeuanganController::class);
 Route::resource('/imunisasi', ImunisasiController::class);
+Route::resource('petugas', PetugasController::class);
+Route::resource('bidans', BidanController::class);
 
+
+Route::get('/kms/{balita_id}', [\App\Http\Controllers\PenimbanganController::class, 'kms'])->name('penimbangan.kms');
 
 //filter Penimbangan
 Route::get('/filter/periodeTimbang',[PenimbanganController::class,'periodeTimbang']);

@@ -25,6 +25,7 @@
                 <th>Jenis Imunisasi</th>
                 <th>Tanggal</th>
                 <th>Keterangan</th>
+                <th>Vitamin A</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -35,6 +36,7 @@
                     <td>{{ $imunisasi->jenis_imunisasi }}</td>
                     <td>{{ \Carbon\Carbon::parse($imunisasi->tanggal_imunisasi)->format('d-m-Y') }}</td>
                     <td>{{ $imunisasi->keterangan ?? '-' }}</td>
+                    <td>{{ $imunisasi->vitamin ?? '-' }}</td>
                     <td>
                         <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#showModal{{ $imunisasi->id }}">Lihat</button>
                         <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{{ $imunisasi->id }}">Edit</button>
@@ -42,7 +44,7 @@
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="5" class="text-center">Belum ada data</td></tr>
+                <tr><td colspan="6" class="text-center">Belum ada data</td></tr>
             @endforelse
         </tbody>
     </table>
@@ -64,6 +66,7 @@
                         <p><strong>Jenis Imunisasi:</strong> {{ $imunisasi->jenis_imunisasi }}</p>
                         <p><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($imunisasi->tanggal_imunisasi)->format('d-m-Y') }}</p>
                         <p><strong>Keterangan:</strong> {{ $imunisasi->keterangan ?? '-' }}</p>
+                        <p><strong>Vitamin A:</strong> {{ $imunisasi->vitamin ?? '-' }}</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -104,6 +107,17 @@
                         <div class="mb-3">
                             <label>Keterangan</label>
                             <textarea name="keterangan" class="form-control">{{ $imunisasi->keterangan }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label>Vitamin A</label><br>
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio" name="vitamin" id="vitaminMerah{{ $imunisasi->id }}" value="Merah" {{ $imunisasi->vitamin == 'Merah' ? 'checked' : '' }}>
+                              <label class="form-check-label" for="vitaminMerah{{ $imunisasi->id }}">Merah</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio" name="vitamin" id="vitaminBiru{{ $imunisasi->id }}" value="Biru" {{ $imunisasi->vitamin == 'Biru' ? 'checked' : '' }}>
+                              <label class="form-check-label" for="vitaminBiru{{ $imunisasi->id }}">Biru</label>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -166,6 +180,17 @@
                     <div class="mb-3">
                         <label>Keterangan</label>
                         <textarea name="keterangan" class="form-control"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label>Vitamin A</label><br>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="vitamin" id="vitaminMerahCreate" value="Merah">
+                          <label class="form-check-label" for="vitaminMerahCreate">Merah</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="vitamin" id="vitaminBiruCreate" value="Biru">
+                          <label class="form-check-label" for="vitaminBiruCreate">Biru</label>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

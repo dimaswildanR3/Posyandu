@@ -12,7 +12,7 @@ class Imunisasi extends Model
         'balita_id',
         'jenis_imunisasi',
         'tanggal_imunisasi',
-        'keterangan',
+        'keterangan','umur','vitamin',
     ];
 
     public function balita()

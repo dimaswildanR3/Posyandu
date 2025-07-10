@@ -11,13 +11,23 @@ class OrangTua extends Model
     protected $table= "orang_tuas";
     protected $primaryKey = "id";
     protected $fillable = [
-        'id',
         'nama',
-        'pekerjaan',
+        'tempat_lahir_ibu',
+        'tanggal_lahir_ibu',
         'pendidikan',
+        'pekerjaan',
+        'nama_suami',
+        'tempat_lahir_suami',
+        'tanggal_lahir_suami',
+        'pendidikan_suami',
+        'pekerjaan_suami',
         'alamat',
+        'kota',
+        'kecamatan',
+        'no_tlpn',
         'ket',
     ];
+    
     public function balitas(){
         return $this->hasMany(Balita::class);
     }

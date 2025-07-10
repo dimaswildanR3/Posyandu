@@ -18,6 +18,17 @@
             <form action="/balita" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('post')
+                
+                <div class="form-group">
+                    <label for="nik_anak">NIK Anak</label>
+                    <input autocomplete="off" type="text" class="form-control @error('nik_anak') is-invalid @enderror" name="nik_anak" id="nik_anak" value="{{ old('nik_anak') }}">
+                    @error('nik_anak')
+                    <div class="invalid-feedback">
+                        {{$message}}
+                    </div>
+                    @enderror
+                </div>
+                
                 <div class="form-group">
                     <label for="nama_balita">Nama Anak</label>
                     <input autocomplete="off" type="text" class="form-control @error('nama_balita') is-invalid @enderror" name="nama_balita"  id="nama_balita" value="{{ old('nama_balita') }}">
@@ -51,8 +62,9 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="form-group">
-                    <label for="tgl_lahir">Jenis Kelamin</label>
+                <label for="tgl_lahir">Jenis Kelamin</label>
                     <select name="jenis_kelamin" class="custom-select mr-sm-2 @error('jenis_kelamin') is-invalid @enderror" id="inlineFormCustomSelect">
                         <option value="Laki-laki">Laki-laki</option>
                         <option value="Perempuan">Perempuan</option>
@@ -71,7 +83,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group mt-2">
+                <!-- <div class="form-group mt-2">
                     <label for="ket">Keterangan</label>
                     <textarea autocomplete="off" type="text" class="form-control @error('ket') is-invalid @enderror" name="ket"  id="nama" value="{{ old('ket') }}"></textarea>
                     @error('ket')
@@ -79,7 +91,7 @@
                         {{$message}}
                     </div>
                     @enderror
-                </div>
+                </div> -->
                 <button type="submit" class="btn btn-outline-success">Simpan</button>
             </form>
         </div>

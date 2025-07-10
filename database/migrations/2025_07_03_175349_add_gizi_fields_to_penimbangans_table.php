@@ -23,7 +23,9 @@ class AddGiziFieldsToPenimbangansTable extends Migration
     public function down()
     {
         Schema::table('penimbangans', function (Blueprint $table) {
-            $table->dropColumn(['umur', 'status_gizi', 'z_score']);
+            $table->integer('umur')->nullable()->after('tb'); // umur dalam bulan
+            $table->string('status_gizi')->nullable()->after('umur'); // Gizi Baik, Kurang, Buruk
+            $table->float('z_score')->nullable()->after('status_gizi'); // opsional
         });
     }
 }

@@ -257,5 +257,28 @@ private function hitungZScore($umur, $bb)
     return round(($bb - $median) / $sd, 2);
 }
 
+public function kms(Request $request, $balita_id)
+{
+    $balita = \App\Models\Balita::findOrFail($balita_id);
+
+    // Ambil filter tanggal dari query param, kalau kosong pakai null (ambil semua)
+    $dari = $request->query('dari');
+    $sampai = $request->query('sampai');
+
+    $query = \App\Models\Penimbangan::where('balita_id', $balita_id);
+
+    if ($dari) {
+        $query->whereDate('tanggal_timbang', '>=', $dari);
+    }
+    if ($sampai) {
+        $query->whereDate('tanggal_timbang', '<=', $sampai);
+    }
+
+    $penimbangans = $query->orderBy('tanggal_timbang')->get();
+
+    return view('timbangan.kms', compact('balita', 'penimbangans', 'dari', 'sampai'));
+}
+
+
 
 }

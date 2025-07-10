@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Balita;
 use App\Models\Gallery;
+use App\Models\Bidan;
 use App\Models\Jadwal;
 use App\Models\OrangTua;
 use App\Models\Penimbangan;
@@ -21,9 +22,17 @@ class JadwalController extends Controller
      */
     public function index()
     {
+        
         $jadwal = Jadwal::orderBy('tanggal_kegiatan','ASC')->get();
+
+        foreach ($jadwal as $item) {
+            if ($item->bidan_id && $item->bidan) {
+                $item->nama_kegiatan = $item->bidan->nama_lengkap;
+            }
+        }
         $timbangan = Penimbangan::with('balita')->orderBy('tanggal_timbang','ASC')->paginate(100);
         $balita = Balita::all();
+        $bidans = Bidan::all();
         $countBalita = count($balita);
         $chart = [];
         $tinggiBadan = [];
@@ -50,6 +59,7 @@ class JadwalController extends Controller
             'beratBadan',
             'gallery',
             'balita',
+            'bidans',
             'laki',
             'perem',
         ));
