@@ -17,7 +17,7 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
- 
+
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet">
   <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
@@ -45,7 +45,7 @@
 
       <div class="logo mr-auto">
         <!-- <h1 class="text-light"><a href="/"><img src="assets/img/POSYANDU.png" alt="" style="height: 50px;" class="img-fluid"><span>POSYANDU  SERUNI 3</span></a></h1> -->
-      
+
         <!-- Uncomment below if you prefer to use an image logo -->
         <!-- {{-- <a href="/"><img src="assets/img/POSYANDU.png" alt="" style="height: 50px;" class="img-fluid"></a> --}} -->
       </div>
@@ -146,7 +146,7 @@
 
       <section id="jadwal" class="features">
         <div class="container">
-  
+
           <div class="section-title" data-aos="fade-up">
             {{-- <h2>Jadwal</h2> --}}
             <p>Jadwal Pelayanan</p>
@@ -158,14 +158,14 @@
                   <th scope="col">No</th>
                   <th scope="col">Bidan</th>
                   <th scope="col">Tanggal</th>
-                 
+
                 </tr>
               </thead>
               <tbody>
                 @php
                     $i=1;
                 @endphp
-                @foreach ($jadwal as $item) 
+                @foreach ($jadwal as $item)
                 <tr>
                 <th scope="row">{{$i++}}</th>
                   <td>{{$item->nama_kegiatan}}</td>
@@ -174,20 +174,20 @@
                 @endforeach
               </tbody>
             </table>
-          </div> 
-  
+          </div>
+
           <!-- @foreach ($jadwal as $item)
           <div class="section-title pl-4" data-aos="fade-up">
             <h2 style="color:#010483 ">{{date('d F Y',strtotime($item->tanggal_kegiatan))}} </h2>
-             <p style="color: red;padding-left:20px;">{{$item->nama_kegiatan}}</p> 
-            <h3 style="padding-left:50px;font-size: 28px;font-weight: 700;color: #dd2c93{{-- #207a59 --}};">{{$item->nama_kegiatan}} 
+             <p style="color: red;padding-left:20px;">{{$item->nama_kegiatan}}</p>
+            <h3 style="padding-left:50px;font-size: 28px;font-weight: 700;color: #dd2c93{{-- #207a59 --}};">{{$item->nama_kegiatan}}
             </h3>
             <span style="color:rosybrown;font-size: 14px;padding-left:60px;">Jam Layanan : {{$item->waktu}} WIB</span>
           </div>
           @endforeach -->
-  
-          
-  
+
+
+
         </div>
       </section><!-- End Features Section -->
 
@@ -204,7 +204,7 @@
               <p>Anak</p>
             </div>
           </div>
-          
+
           <div class="col">
             <div class="count-box">
               <i class="icofont-people"></i>
@@ -220,7 +220,7 @@
               <p>Hard Workers</p>
             </div>
           </div> --}}
-          
+
         </div>
         <div class="count-box">
           <table class="table table-bordered">
@@ -230,25 +230,25 @@
                 <th scope="col">Nama Anak</th>
                 <th scope="col">Nama Orangtua</th>
                 <th scope="col">Alamat </th>
-               
+
               </tr>
             </thead>
             <tbody>
               @php
                   $i=1;
               @endphp
-              @foreach ($balita as $item) 
+              @foreach ($balita as $item)
               <tr>
               <th scope="row">{{$i++}}</th>
                 <td>{{$item->nama_balita}}</td>
-                <td>{{$item->orangtua->nama}} </td>
-                <td>{{$item->orangtua->alamat}} </td>
+                <td>{{$item->orangtua->nama ?? '-'}} </td>
+                <td>{{$item->orangtua->alamat ?? '-'}} </td>
               </tr>
               @endforeach
             </tbody>
           </table>
         </div>
-        
+
 
       </div>
     </section><!-- End Counts Section -->
@@ -261,7 +261,7 @@
         </div>
       </div>
     </div>
-    
+
 
     <!-- ======= Gallery Section ======= -->
     {{-- <section id="gallery" class="gallery">
@@ -374,9 +374,9 @@
     <!-- End Team Section -->
 
     <!-- ======= Pricing Section ======= -->
-   
 
-    
+
+
 
     <!-- ======= Contact Section ======= -->
     <section id="contact" class="contact">
@@ -519,7 +519,7 @@
         data: {!! json_encode($perem) !!}
     }]
 });
-            
+
   </script>
   <script>
     Highcharts.chart('chartNilai2', {
@@ -582,9 +582,9 @@
           // data: [133, 156, 947, 408, 6]
           data: {!! json_encode($perem) !!}
       }]
-  }); 
+  });
   </script>
-  
+
 </body>
 
 </html>

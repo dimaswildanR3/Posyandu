@@ -22,6 +22,8 @@ class CreateBalitasTable extends Migration
             $table->foreignId('orang_tua_id')->nullable();
             $table->string('ket')->nullable();
             $table->timestamps();
+
+            $table->foreign('orang_tua_id')->references('id')->on('orang_tuas')->onDelete('cascade');
         });
     }
 

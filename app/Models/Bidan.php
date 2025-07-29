@@ -2,22 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Bidan extends Model
+
 {
     use HasFactory;
-
     protected $table = 'bidans';
+
 
     protected $fillable = [
         'nama_lengkap',
-        'tempat_lahir',
         'tanggal_lahir',
+        'tempat_lahir',
         'no_hp',
-        'pendidikan_terakhir',
         'user_id',
+        'pendidikan_terakhir',
     ];
 
     // Relasi ke User
