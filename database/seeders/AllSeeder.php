@@ -21,6 +21,8 @@ class AllSeeder extends Seeder
         $faker = Faker::create('id_ID');
         User::updateOrCreate([
             'name' => 'Admin',
+            'username' => 'admin',
+            'role' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('1234'),
         ]);
