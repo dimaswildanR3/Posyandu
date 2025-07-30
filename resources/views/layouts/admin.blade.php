@@ -105,24 +105,32 @@
         <p style="font-size: 16px; color: white">Menu</p><i class="fa fa-list nav_btn"></i>
       </div>
       <div class="mobile_nav_items">
-        <a href="/dashboard"><i class="fas fa-desktop"></i><span>Dashboard</span></a>
-        <!-- <a href="/gallery"><i class="fas fa-image"></i><span>Galeri</span></a> -->
-        <a href="/balita"><i class="fas fa-baby-carriage"></i><span>Data Anak</span></a>
-        <a href="/orangtua"><i class="fas fa-baby-carriage"></i><span>Data Ibu</span></a>
-        <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
-        <a href="/petugas"><i class="fas fa-balance-scale"></i><span>Data Petugas</span></a>
-        <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
-        <!-- <a class="dropdown-btn"><i class="fas fa-university"></i><span>Data Keuangan</span></a> -->
-        <div class="dropdown-container">
-          <a href="/kasmasuk"><i class="fas fa-plus-square"></i><span>Kas Masuk</span></a>
-          <a href="/kaskeluar"><i class="fas fa-minus-square"></i><span>Kas Keluar </span></a>
-          <a href="/keuangan"><i class="fas fa-sort-amount-up"></i><span>Rekapitulasi</span></a>
-          {{-- <a href="#">Link 1</a>
-          <a href="#">Link 2</a>
-          <a href="#">Link 3</a> --}}
-        </div>
-        <a href="/blog"><i class="fas fa-blog"></i><span>Data Jadwal Bidan</span></a>
-        <a href="/akun"><i class="fas fa-user"></i><span>Data Kader</span></a>
+      <a href="/dashboard"><i class="fas fa-desktop"></i><span>Dashboard</span></a>
+
+@if(auth()->user()->role == 'admin')
+    <a href="/balita"><i class="fas fa-baby-carriage"></i><span>Data Anak</span></a>
+    <a href="/orangtua"><i class="fas fa-baby-carriage"></i><span>Data Ibu</span></a>
+    <a href="/bidans"><i class="fas fa-baby-carriage"></i><span>Data Bidan</span></a>
+    <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
+    <a href="/petugas"><i class="fas fa-balance-scale"></i><span>Data Petugas</span></a>
+    <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
+    <a href="/blog"><i class="fas fa-blog"></i><span>Data Jadwal Bidan</span></a>
+    <a href="/akun"><i class="fas fa-user"></i><span>Data Kader</span></a>
+@endif
+
+@if(auth()->user()->role == 'bidan')
+    <a href="/balita"><i class="fas fa-baby-carriage"></i><span>Data Anak</span></a>
+    <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
+    <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
+    <a href="/blog"><i class="fas fa-blog"></i><span>Data Jadwal Bidan</span></a>
+@endif
+
+@if(auth()->user()->role == 'ortu')
+    <a href="/balita"><i class="fas fa-baby-carriage"></i><span>Data Anak</span></a>
+    <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
+    <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
+@endif
+
       </div>
     </div>
     <!--mobile navigation bar end-->
@@ -133,23 +141,31 @@
         <h4>Admin</h4>
       </div> --}}
       <a href="/dashboard"><i class="fas fa-desktop"></i><span>Dashboard</span></a>
-      <!-- <a href="/gallery"><i class="fas fa-image"></i><span>Galeri</span></a> -->
-      <a href="/balita"><i class="fas fa-baby-carriage"></i><span>Data Anak</span></a>
-      <a href="/orangtua"><i class="fas fa-baby-carriage"></i><span>Data Ibu</span></a>
-      <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
-      <a href="/petugas"><i class="fas fa-balance-scale"></i><span>Data Petugas</span></a>
-      <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
-      <!-- <a class="dropdown-btn" style="cursor: pointer;"><i class="fas fa-university"></i><span>Data Keuangan</span></a> -->
-      <div class="dropdown-container">
-        <a href="/kasmasuk"><i class="fas fa-plus-square"></i><span>Kas Masuk</span></a>
-        <a href="/kaskeluar"><i class="fas fa-minus-square"></i><span>Kas Keluar </span></a>
-        <a href="/keuangan"><i class="fas fa-sort-amount-up"></i><span>Rekapitulasi</span></a>
-        {{-- <a href="#">Link 1</a>
-        <a href="#">Link 2</a>
-        <a href="#">Link 3</a> --}}
-      </div>
-      <a href="/blog"><i class="fas fa-calendar"></i><span>Data Jadwal Bidan</span></a>
-      <a href="/akun"><i class="fas fa-user"></i><span>Kader</span></a>
+
+@if(auth()->user()->role == 'admin')
+    <a href="/balita"><i class="fas fa-baby-carriage"></i><span>Data Anak</span></a>
+    <a href="/orangtua"><i class="fas fa-baby-carriage"></i><span>Data Ibu</span></a>
+    <a href="/bidans"><i class="fas fa-baby-carriage"></i><span>Data Bidan</span></a>
+    <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
+    <a href="/petugas"><i class="fas fa-balance-scale"></i><span>Data Petugas</span></a>
+    <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
+    <a href="/blog"><i class="fas fa-blog"></i><span>Data Jadwal Bidan</span></a>
+    <a href="/akun"><i class="fas fa-user"></i><span>Data Kader</span></a>
+@endif
+
+@if(auth()->user()->role == 'bidan')
+    <a href="/balita"><i class="fas fa-baby-carriage"></i><span>Data Anak</span></a>
+    <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
+    <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
+    <a href="/blog"><i class="fas fa-blog"></i><span>Data Jadwal Bidan</span></a>
+@endif
+
+@if(auth()->user()->role == 'ortu')
+    <a href="/balita"><i class="fas fa-baby-carriage"></i><span>Data Anak</span></a>
+    <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
+    <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
+@endif
+
    
     </div>
     <!--sidebar end-->

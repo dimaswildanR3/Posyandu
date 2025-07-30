@@ -19,8 +19,11 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'username',
         'password',
+        'role',
     ];
+    
 
     /**
      * The attributes that should be hidden for arrays.
@@ -43,6 +46,10 @@ class User extends Authenticatable
 
     public function penimbangan(){
         return $this->hasMany(Penimbangan::class);
+    }
+    public function hasRole($role)
+    {
+        return $this->role === $role;
     }
 
     public function keuangan(){
