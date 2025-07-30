@@ -19,6 +19,7 @@ class Penimbangan extends Model
         'catatan',
         'umur',
         'status_gizi',
+        'status_stunting',
         'z_score',
         'acara_kegiatan',
     ];

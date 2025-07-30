@@ -41,12 +41,29 @@
       .border-left-primary {
         border-left: 0.25rem solid #ff7ec9 !important; /*Warna untuk sisi kiri di semua menu dashboard back end*/
       }
+
+       .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: -10px; /* geser kiri sedikit */
+  }
+
+  .navbar-brand img {
+    height: 45px;
+  }
+
+  .navbar-brand span {
+    font-weight: bold;
+    color: white;
+    font-size: 20px;
+  }
     </style>
   </head>
   <body>
       <input type="checkbox" id="check">
       <nav class="navbar navbar-expand-lg navbar-dark bg-secondary" {{--style="background: #ff7ec9"--}}>
-        <div class="container">
+        <div class="container-fluid px-4">
         <a href="/dashboard" class="navbar-brand">
           <img src = {{ asset('assets/img/POSYANDU.png') }}{{--"assets/img/POSYANDU.png"--}} alt="" style="height: 50px;" class="img-fluid"><span>POSYANDU</span>
         </a>

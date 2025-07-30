@@ -37,6 +37,8 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/dashboard', [DashboardController::class,'index']);
 
+Route::get('/penimbangan/cetak', [PenimbanganController::class, 'cetakPdf']);
+
 //Route input Data Create Read Update Delete @resource
 Route::resource('/balita' ,BalitaController::class);
 Route::resource('/orangtua' ,OrangTuaController::class);
@@ -48,6 +50,7 @@ Route::resource('bidans', BidanController::class);
 
 
 Route::get('/kms/{balita_id}', [\App\Http\Controllers\PenimbanganController::class, 'kms'])->name('penimbangan.kms');
+
 
 //filter Penimbangan
 Route::get('/filter/periodeTimbang',[PenimbanganController::class,'periodeTimbang']);

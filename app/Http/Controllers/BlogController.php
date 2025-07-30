@@ -44,7 +44,7 @@ class BlogController extends Controller
         $request->validate([
             'tanggal_kegiatan'=>'required',
             'bidan_id'=>'required|exists:bidans,id',
-            'waktu'=>'required'
+            'waktu' => 'required|date_format:H:i',
         ]);
     
         $bidan = \App\Models\Bidan::find($request->bidan_id);
@@ -96,7 +96,7 @@ class BlogController extends Controller
         $request->validate([
             'nama_kegiatan' =>'required',
             'tanggal_kegiatan' =>'required',
-            'waktu' =>'required',
+            'waktu' => 'required|date_format:H:i',
         ]);
         
         Jadwal::where('id',$id)

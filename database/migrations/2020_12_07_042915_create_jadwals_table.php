@@ -18,7 +18,7 @@ class CreateJadwalsTable extends Migration
             $table->integer('user_id')->index()->nullable();
             $table->string('nama_kegiatan')->nullable();
             $table->string('tanggal_kegiatan')->nullable();
-            $table->string('waktu')->nullable();
+            $table->time('waktu')->nullable();
             $table->timestamps();
         });
     }

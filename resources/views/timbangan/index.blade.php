@@ -102,40 +102,80 @@
         </div>
     @endif
 </div>
-<div class="mt-4 p-3 border rounded bg-light">
-    <form action="{{ url('/filter/periodeTimbang') }}" method="get" class="row g-3 align-items-end">
-        <!-- <div class="col-md-3">
-            <label for="dari" class="form-label">Dari</label>
-            <input type="text" name="dari" class="form-control dateselect" autocomplete="off" value="{{ $dari }}" id="dari">
+<div class="row g-3">
+    <!-- KMS Card (Kiri) -->
+    <div class="col-md-6">
+        <div class="card shadow-sm border-left-primary h-100">
+            <div class="card-body">
+                <h5 class="mb-3"><i class="fas fa-child"></i> Lihat Kartu Menuju Sehat (KMS)</h5>
+                <form class="row g-3 align-items-end">
+                    <div class="col-md-8">
+                        <label for="selectBalita" class="form-label">Nama Balita</label>
+                        <select name="balita_id" id="selectBalita" class="form-select @error('balita_id') is-invalid @enderror">
+                            @foreach ($balita as $option)
+                                <option value="{{ $option->id }}">{{ $option->nama_balita }}</option>
+                            @endforeach
+                        </select>
+                        @error('balita_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-4">
+                        <a href="#" id="lihatKMS" class="btn btn-info w-100 mt-4" target="_blank">
+                            <i class="fas fa-file-alt"></i> Lihat KMS
+                        </a>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="col-md-3">
-            <label for="sampai" class="form-label">Sampai</label>
-            <input type="text" name="sampai" class="form-control dateselect" autocomplete="off" value="{{ $sampai }}" id="sampai">
-        </div> -->
-        <div class="col-md-4">
-            <label for="selectBalita" class="form-label">Nama Balita</label>
-            <select name="balita_id" id="selectBalita" class="form-select @error('balita_id') is-invalid @enderror">
-                @foreach ($balita as $option)
-                    <option value="{{ $option->id }}">{{ $option->nama_balita }}</option>
-                @endforeach
-            </select>
-            @error('balita_id')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-        <!-- <div class="col-md-2 d-grid">
-            <button type="submit" class="btn btn-outline-secondary w-100">
-                <i class="fas fa-search"></i> Cari
-            </button>
-        </div> -->
-    </form>
+    </div>
 
-    <div class="mt-3 text-end">
-        <a href="#" id="lihatKMS" class="btn btn-info" target="_blank">
-            <i class="fas fa-file-alt"></i> Lihat KMS
-        </a>
+    <!-- Filter Cetak Card (Kanan) -->
+    <div class="col-md-6">
+        <div class="card shadow-sm border-left-primary h-100">
+            <div class="card-body">
+                <h5 class="mb-3"><i class="fas fa-filter"></i> Filter Cetak Laporan</h5>
+                <form action="{{ url('/penimbangan/cetak') }}" method="get" target="_blank">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-6">
+                            <label for="tahun" class="form-label">Pilih Tahun</label>
+                            <select name="tahun" class="form-select">
+                                <option value="">Semua Tahun</option>
+                                @for ($i = now()->year; $i >= 2018; $i--)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                           <label for="status" class="form-label">Filter Status Gizi / Stunting</label>
+<select name="status" class="form-select">
+    <option value="">Semua Status</option>
+    <optgroup label="Status Gizi">
+        <option value="Normal">Normal</option>
+        <option value="Gizi Kurang">Gizi Kurang</option>
+        <option value="Gizi Buruk">Gizi Buruk</option>
+        <option value="Risiko Gizi Lebih">Gizi Lebih</option>
+    </optgroup>
+    <optgroup label="Status Stunting">
+        <option value="Sangat Pendek">Sangat Pendek</option>
+        <option value="Pendek">Pendek</option>
+        <option value="Normal (TB)">Normal</option>
+        <option value="Tinggi">Tinggi</option>
+    </optgroup>
+</select>
+                        </div>
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-success w-100 mt-2">
+                                <i class="fas fa-file-pdf"></i> Cetak PDF
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
+
 <br><br>
 <div style="padding-bottom:200px">
     <div class="card shadow p-3 mb-5 bg-white rounded border-left-primary">
@@ -163,6 +203,7 @@
                     </div>
                 </form>
             </div>
+            <br>
         <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
             <thead style="background: #fd6bc5">
               <tr>
@@ -177,6 +218,7 @@
                 <th scope="col">Umur (bln)</th>
 <th scope="col">Status Gizi</th>
 <th scope="col">Z-Score</th>
+<th scope="col">Status Stunting</th>
 
                 <th scope="col">Aksi</th>
               </tr>
@@ -195,6 +237,8 @@
                     <td>{{ $item->umur }} bln</td>
 <td>{{ $item->status_gizi }}</td>
 <td>{{ $item->z_score }}</td>
+<td>{{ $item->status_stunting }}</td>
+
 
                     <td>
                     <form action="{{ route('penimbangan.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">

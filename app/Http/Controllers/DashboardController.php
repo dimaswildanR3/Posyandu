@@ -15,59 +15,76 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $jumlahMasuk = Keuangan::sum('pemasukan');
-        $jumlahKeluar = Keuangan::sum('pengeluaran');
-        $saldo = $jumlahMasuk - $jumlahKeluar;
-        $jumlahBalita = Balita::count();
-    
-        $data = DB::table('penimbangans')
-            ->selectRaw("DATE_FORMAT(tanggal_timbang, '%Y-%m') as bulan, status_gizi, COUNT(*) as jumlah")
-            ->whereNotNull('status_gizi')
-            ->groupBy('bulan', 'status_gizi')
-            ->orderBy('bulan')
-            ->get();
-    
-        $all_bulan = collect($data)->pluck('bulan')->unique()->sort()->values()->toArray();
-        $all_kategori = collect($data)->pluck('status_gizi')->unique()->values()->toArray();
-    
-        // Susun data indexed: status_gizi -> bulan -> jumlah
-        $grouped = [];
-        foreach ($data as $item) {
-            $grouped[$item->status_gizi][$item->bulan] = $item->jumlah;
-        }
-    
-        $colorList = [
-            'Gizi Baik' => '#1cc88a',
-            'Gizi Kurang' => '#e74a3b',
-            'Risiko Gizi Lebih' => '#f6c23e',
-            'Stunting' => '#4e73df'
-        ];
-    
-        // Buat dataset per bulan, dengan data array jumlah anak per kategori status_gizi
-        $datasets = [];
-        foreach ($all_bulan as $bulan) {
-            $dataPerKategori = [];
-            foreach ($all_kategori as $kategori) {
-                $dataPerKategori[] = $grouped[$kategori][$bulan] ?? 0;
-            }
-            $datasets[] = [
-                'label' => $bulan,
-                'data' => $dataPerKategori,
-                'backgroundColor' => '#' . substr(md5($bulan), 0, 6) // warna unik per bulan
-            ];
-        }
-    
-        $chartData = [
-            'labels' => $all_kategori, // ini sumbu Y (kategori status gizi)
-            'datasets' => $datasets
-        ];
-    
-        return view('dashboard', compact('jumlahBalita', 'jumlahMasuk', 'jumlahKeluar', 'saldo', 'chartData', 'colorList'));
+   public function index()
+{
+    $jumlahMasuk = Keuangan::sum('pemasukan');
+    $jumlahKeluar = Keuangan::sum('pengeluaran');
+    $saldo = $jumlahMasuk - $jumlahKeluar;
+    $jumlahBalita = Balita::count();
+
+    $data = DB::table('penimbangans')
+        ->join('balitas', 'penimbangans.balita_id', '=', 'balitas.id')
+        ->selectRaw("DATE_FORMAT(tanggal_timbang, '%Y-%m') as bulan, status_gizi, status_stunting, jenis_kelamin, COUNT(*) as jumlah")
+        ->whereNotNull('status_gizi')
+        ->whereNotNull('status_stunting')
+        ->groupBy('bulan', 'status_gizi', 'status_stunting', 'jenis_kelamin')
+        ->orderBy('bulan')
+        ->get();
+
+    $all_bulan = collect($data)->pluck('bulan')->unique()->sort()->values()->toArray();
+    $all_gender = collect($data)->pluck('jenis_kelamin')->unique()->values()->toArray();
+
+    $groupedGizi = [];
+    $groupedStunting = [];
+
+    foreach ($data as $item) {
+        $groupedGizi[$item->status_gizi][$item->jenis_kelamin][$item->bulan] = $item->jumlah;
+        $groupedStunting[$item->status_stunting][$item->jenis_kelamin][$item->bulan] = $item->jumlah;
     }
-    
-        
+
+    $datasetsGizi = [];
+    $datasetsStunting = [];
+
+    foreach ($all_gender as $jk) {
+        $dataGizi = [];
+        $dataStunting = [];
+
+        foreach ($all_bulan as $bulan) {
+            $dataGizi[] = ($groupedGizi['Gizi Baik'][$jk][$bulan] ?? 0)
+                + ($groupedGizi['Gizi Kurang'][$jk][$bulan] ?? 0)
+                + ($groupedGizi['Risiko Gizi Lebih'][$jk][$bulan] ?? 0);
+
+            $dataStunting[] = ($groupedStunting['Pendek'][$jk][$bulan] ?? 0)
+                + ($groupedStunting['Sangat Pendek'][$jk][$bulan] ?? 0);
+        }
+
+        $datasetsGizi[] = [
+            'label' => 'Gizi - ' . $jk,
+            'data' => $dataGizi,
+            'backgroundColor' => $jk == 'Laki-laki' ? '#4e73df' : '#f6c23e'
+        ];
+
+        $datasetsStunting[] = [
+            'label' => 'Stunting - ' . $jk,
+            'data' => $dataStunting,
+            'backgroundColor' => $jk == 'Laki-laki' ? '#e74a3b' : '#1cc88a'
+        ];
+    }
+
+    $chartGizi = [
+        'labels' => $all_bulan,
+        'datasets' => $datasetsGizi
+    ];
+
+    $chartStunting = [
+        'labels' => $all_bulan,
+        'datasets' => $datasetsStunting
+    ];
+
+    return view('dashboard', compact('jumlahBalita', 'jumlahMasuk', 'jumlahKeluar', 'saldo', 'chartGizi', 'chartStunting'));
+}
+
+
     
 
 

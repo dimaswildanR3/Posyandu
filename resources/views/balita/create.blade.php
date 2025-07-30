@@ -100,7 +100,7 @@
 </div>
 <script type="text/javascript">
     $('.date').datepicker({  
-       format: 'dd-mm-yyyy'
+       format: 'yyyy-mm-dd'
      });  
 </script>
 

@@ -17,6 +17,7 @@ class AddGiziFieldsToPenimbangansTable extends Migration
             $table->integer('umur')->nullable()->after('tb'); // umur dalam bulan
             $table->string('status_gizi')->nullable()->after('umur'); // Gizi Baik, Kurang, Buruk
             $table->float('z_score')->nullable()->after('status_gizi'); // opsional
+            $table->string('status_stunting')->nullable()->after('z_score'); 
         });
     }
 
@@ -26,6 +27,7 @@ class AddGiziFieldsToPenimbangansTable extends Migration
             $table->integer('umur')->nullable()->after('tb'); // umur dalam bulan
             $table->string('status_gizi')->nullable()->after('umur'); // Gizi Baik, Kurang, Buruk
             $table->float('z_score')->nullable()->after('status_gizi'); // opsional
+            $table->string('status_stunting')->nullable()->after('z_score'); 
         });
     }
 }

@@ -62,52 +62,58 @@
 
 </div>
 
-<!-- Chart Row -->
-<div class="card mt-4">
-    <div class="card-header">
-        <h6 class="m-0 font-weight-bold text-primary">Grafik Status Gizi dan Stunting per Bulan</h6>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">Grafik Gizi per Bulan</h6>
+            </div>
+            <div class="card-body">
+                <canvas id="chartGizi"></canvas>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-        <canvas id="giziStuntingChart" height="300"></canvas>
+
+    <div class="col-md-6">
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">Grafik Stunting per Bulan</h6>
+            </div>
+            <div class="card-body">
+                <canvas id="chartStunting"></canvas>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- Chart JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const chartData = @json($chartData);
+    const chartGizi = @json($chartGizi);
+    const chartStunting = @json($chartStunting);
 
-    new Chart(document.getElementById('giziStuntingChart'), {
+    new Chart(document.getElementById('chartGizi'), {
         type: 'bar',
-        data: {
-            labels: chartData.labels,
-            datasets: chartData.datasets
-        },
+        data: chartGizi,
         options: {
-            indexAxis: 'y', // horizontal
             responsive: true,
             plugins: {
                 title: {
                     display: true,
-                    text: 'Status Gizi dan Stunting per Bulan'
-                },
-                legend: {
-                    position: 'top',
+                    text: 'Grafik Status Gizi'
                 }
-            },
-            scales: {
-                x: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Jumlah Anak'
-                    }
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Kategori'
-                    }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('chartStunting'), {
+        type: 'bar',
+        data: chartStunting,
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Grafik Balita Stunting'
                 }
             }
         }

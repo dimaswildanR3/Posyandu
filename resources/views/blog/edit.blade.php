@@ -37,7 +37,7 @@
     </div>
     <div class="form-group">
         <label for="waktu">Jam Pelayanan</label>
-        <input autocomplete="off" placeholder="00:00" type="text" class="form-control @error('waktu') is-invalid @enderror" name="waktu"  id="waktu	" value="{{$jadwal->waktu}}">
+        <input autocomplete="off" placeholder="00:00" type="time" class="form-control @error('waktu') is-invalid @enderror" name="waktu"  id="waktu	" value="{{$jadwal->waktu}}">
         @error('waktu')
         <div class="invalid-feedback">
             {{$message}}

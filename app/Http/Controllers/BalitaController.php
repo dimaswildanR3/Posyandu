@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Balita;
 use App\Models\OrangTua;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BalitaController extends Controller
@@ -29,13 +30,14 @@ class BalitaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'nik_anak' => 'nullable|string|max:50',
             'nama_balita'=>'required',
             'tpt_lahir'=>'required',
-            'tgl_lahir'=>'required',
+            'tgl_lahir' => 'required|date_format:Y-m-d',
             'orang_tua_id'=>'required',
-            'ket'=>'required',
+            'ket'=>'nullable|string',
             'jenis_kelamin'=>'required',
-        ]);
+        ]);         
         Balita::create($request->all());
         return redirect('/balita')->with('status','Data Anak berhasil ditambahkan!');
 
@@ -59,12 +61,13 @@ class BalitaController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama_balita'=>'required',
-            'tpt_lahir'=>'required',
-            'tgl_lahir'=>'required',
-            'orang_tua_id'=>'required',
-            'ket'=>'required',
-            'jenis_kelamin'=>'required'
+        'nik_anak' => 'nullable|string|max:50',
+        'nama_balita'=>'required',
+        'tpt_lahir'=>'required',
+        'tgl_lahir' => 'required|date_format:Y-m-d',
+        'orang_tua_id'=>'required',
+        'ket'=>'nullable|string',
+        'jenis_kelamin'=>'required',
         ]);
         Balita::where('id',$id)
                 ->update([

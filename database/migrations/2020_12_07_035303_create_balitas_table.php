@@ -17,7 +17,7 @@ class CreateBalitasTable extends Migration
             $table->id();
             $table->string('nama_balita')->nullable();
             $table->string('tpt_lahir')->nullable();
-            $table->string('tgl_lahir')->nullable();
+            $table->date('tgl_lahir')->nullable();
             $table->string('jenis_kelamin')->nullable();
             $table->foreignId('orang_tua_id')->nullable();
             $table->string('ket')->nullable();
