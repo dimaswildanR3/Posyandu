@@ -77,7 +77,7 @@
             <option value="">-- Pilih Role --</option>
             <option value="admin" {{ $akun->role == 'admin' ? 'selected' : '' }}>Admin</option>
             <option value="ortu" {{ $akun->role == 'ortu' ? 'selected' : '' }}>Orangtua</option>
-            <option value="bidan" {{ $akun->role == 'bidan' ? 'selected' : '' }}>Bidan</option>
+            <!-- <option value="bidan" {{ $akun->role == 'bidan' ? 'selected' : '' }}>Bidan</option> -->
             <!-- Tambahkan role lain sesuai kebutuhan -->
         </select>
 

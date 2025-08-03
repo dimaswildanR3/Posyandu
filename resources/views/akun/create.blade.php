@@ -76,7 +76,7 @@
             <option value="">-- Pilih Role --</option>
             <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
             <option value="ortu" {{ old('role') == 'ortu' ? 'selected' : '' }}>Orangtua</option>
-            <option value="bidan" {{ old('role') == 'bidan' ? 'selected' : '' }}>Bidan</option>
+            <!-- <option value="bidan" {{ old('role') == 'bidan' ? 'selected' : '' }}>Bidan</option> -->
         </select>
         @error('role')
             <span class="invalid-feedback" role="alert">
