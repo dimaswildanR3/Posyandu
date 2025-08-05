@@ -28,7 +28,7 @@
                     @foreach ($tanggalPelayanan as $option)
                         <option value="{{$option->tanggal_kegiatan ?? null}}">
                             {{$option->tanggal_kegiatan." - ".$value = $option->nama_kegiatan ?? null}}
-                        
+
                         </option>
                     @endforeach
                 </select>
@@ -87,7 +87,7 @@
         </div>
         <div class="col">
             <div class="panel">
-                <div id="chartNilai1">ssss</div>
+                {{-- <div id="chartNilai1">ssss</div> --}}
             </div>
         </div>
     </div>
@@ -251,14 +251,14 @@
 
 
 
-                        <a href="/penimbangan/{{$item->id}}/edit" class="btn btn-primary" ><i class="fas fa-edit"></i></a> 
+                        <a href="/penimbangan/{{$item->id}}/edit" class="btn btn-primary" ><i class="fas fa-edit"></i></a>
                     </td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
         </div>
-        
+
     </div>
     <!-- Setelah tabel dan pagination -->
 
@@ -283,7 +283,7 @@
 </script>
 
 <script src="https://code.highcharts.com/highcharts.js"></script>
-<script>
+{{-- <script>
     Highcharts.chart('chartNilai1', {
     chart: {
         type: 'bar'
@@ -345,8 +345,8 @@
         data: {!! json_encode($perem) !!}
     }]
 });
-            
-  </script>
+
+  </script> --}}
 <script>
 
     //clickable Row
@@ -404,6 +404,6 @@
 
     },]
 });
-              
+
 </script>
 @endsection
