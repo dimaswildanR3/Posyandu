@@ -11,6 +11,7 @@ class OrangTua extends Model
     protected $table= "orang_tuas";
     protected $primaryKey = "id";
     protected $fillable = [
+        'user_id',
         'nama',
         'tempat_lahir_ibu',
         'tanggal_lahir_ibu',
@@ -31,4 +32,9 @@ class OrangTua extends Model
     public function balitas(){
         return $this->hasMany(Balita::class);
     }
+    public function user()
+{
+    return $this->belongsTo(User::class);
+}
+
 }

@@ -63,4 +63,9 @@ class User extends Authenticatable
     public function galeri(){
         return $this->hasMany(Gallery::class);
     }
+    public function orangTuas()
+{
+    return $this->hasMany(OrangTua::class);
+}
+
 }

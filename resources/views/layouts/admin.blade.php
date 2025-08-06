@@ -8,6 +8,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <link href="assets/vendor/aos/aos.css" rel="stylesheet">
     <link href="{{ asset('css/admin.css') }}" rel="stylesheet">

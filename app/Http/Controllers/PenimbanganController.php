@@ -5,43 +5,59 @@ use PDF;
 use App\Models\Balita;
 use App\Models\Jadwal;
 use App\Models\Penimbangan;
+use App\Models\OrangTua;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-
-
 use Illuminate\Http\Request;
 
 class PenimbanganController extends Controller
 {
-
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $dari = '';
         $sampai = '';
-        $balita = Balita::all();
-        $timbangan = Penimbangan::with('balita','user')->orderBy('tanggal_timbang', 'DESC')->paginate(10);
         $chart = [];
         $tinggiBadan = [];
         $beratBadan = [];
-        foreach($timbangan as $mp){
-            $chart[]= $mp->balita->nama_balita;
-            $beratBadan[]= $mp->bb;
-            $tinggiBadan[]= $mp->tb;
+
+        $user = Auth::user();
+        $orangTua = OrangTua::where('user_id', $user->id)->first();
+
+        if ($user->role === 'ortu') {
+            // Ambil semua balita milik orang tua
+            $balita = Balita::where('orang_tua_id', $orangTua->id)->get();
+            $balitaIds = $balita->pluck('id');
+
+            // Ambil data penimbangan untuk anak-anak tersebut
+            $timbangan = Penimbangan::with('balita', 'user')
+                ->whereIn('balita_id', $balitaIds)
+                ->orderBy('tanggal_timbang', 'DESC')
+                ->paginate(10);
+
+            // Hitung jenis kelamin anak-anak ortu ini
+            $jenisKelaminLaki = $balita->where('jenis_kelamin', 'Laki-laki')->count();
+            $jenisKelaminPerem = $balita->where('jenis_kelamin', 'Perempuan')->count();
+        } else {
+            // Kalau admin
+            $balita = Balita::all();
+            $timbangan = Penimbangan::with('balita', 'user')->orderBy('tanggal_timbang', 'DESC')->paginate(10);
+            $jenisKelaminLaki = Balita::where('jenis_kelamin', 'Laki-laki')->count();
+            $jenisKelaminPerem = Balita::where('jenis_kelamin', 'Perempuan')->count();
         }
 
-        $jenisKelaminLaki = Balita::where('jenis_kelamin','Laki-laki')->get();
-        $laki[] = count($jenisKelaminLaki);
-        
-        $jenisKelaminPerem = Balita::where('jenis_kelamin','Perempuan')->get();
-        $perem[] = count($jenisKelaminPerem);
+        // Chart
+        foreach ($timbangan as $mp) {
+            $chart[] = $mp->balita->nama_balita;
+            $beratBadan[] = $mp->bb;
+            $tinggiBadan[] = $mp->tb;
+        }
+
+        $laki[] = $jenisKelaminLaki;
+        $perem[] = $jenisKelaminPerem;
+
         $tanggalPelayanan = Jadwal::all();
-    
-        return view('timbangan.index',compact(
+
+        return view('timbangan.index', compact(
             'timbangan',
             'balita',
             'chart',
@@ -54,6 +70,7 @@ class PenimbanganController extends Controller
             'sampai'
         ));
     }
+
 
     public function periodeTimbang(Request $request){
 

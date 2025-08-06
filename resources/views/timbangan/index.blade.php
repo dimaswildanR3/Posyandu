@@ -7,8 +7,9 @@
       <li class="breadcrumb-item active" aria-current="page">Data Penimbangan Gizi</li>
     </ol>
 </nav>
-
+@if(Auth::user()->role !== 'ortu')
 <div class="card shadow p-3 mb-5 bg-white rounded border-left-primary">
+    
     <div class="row">
         <div class="col-md-3">
         <form action="/penimbangan" method="post" enctype="multipart/form-data">
@@ -92,6 +93,7 @@
         </div>
     </div>
 </div>
+@endif
 <div class="">
     @if (session('status'))
         <div class="alert alert-success">
@@ -129,7 +131,7 @@
             </div>
         </div>
     </div>
-
+@if(Auth::user()->role !== 'ortu')
     <!-- Filter Cetak Card (Kanan) -->
     <div class="col-md-6">
         <div class="card shadow-sm border-left-primary h-100">
@@ -175,7 +177,7 @@
         </div>
     </div>
 </div>
-
+@endif
 <br><br>
 <div style="padding-bottom:200px">
     <div class="card shadow p-3 mb-5 bg-white rounded border-left-primary">
@@ -241,8 +243,8 @@
 
 
                     <td>
-                    <form action="{{ route('penimbangan.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-    @csrf
+                    <form action="{{ route('penimbangan.destroy', $item->id) }}" method="post" class="d-inline form-delete">
+                    @csrf
     @method('DELETE')
     <button type="submit" class="btn btn-danger">
         <i class="fas fa-trash-alt"></i>
@@ -407,3 +409,32 @@
 
 </script>
 @endsection
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const deleteForms = document.querySelectorAll('.form-delete');
+
+    deleteForms.forEach(form => {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // cegah submit langsung
+
+            Swal.fire({
+                title: 'Yakin ingin menghapus data ini?',
+                text: "Data akan dihapus permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#aaa',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // submit form jika dikonfirmasi
+                }
+            });
+        });
+    });
+});
+</script>

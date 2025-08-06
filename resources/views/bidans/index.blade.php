@@ -38,8 +38,8 @@
                 <td>{{ $bidan->pendidikan_terakhir }}</td>
                 <td>
                     <a href="{{ route('bidans.edit', $bidan->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
-                    <form action="{{ route('bidans.destroy', $bidan->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                        @csrf
+                    <form action="{{ route('bidans.destroy', $bidan->id) }}" method="post" class="d-inline form-delete">
+                    @csrf
                         @method('DELETE')
                         <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
                     </form>
@@ -52,3 +52,30 @@
     {{ $bidans->links() }}
 </div>
 @endsection
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const deleteForms = document.querySelectorAll('.form-delete');
+
+    deleteForms.forEach(form => {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // cegah submit langsung
+
+            Swal.fire({
+                title: 'Yakin ingin menghapus data ini?',
+                text: "Data akan dihapus permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#aaa',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // submit form jika dikonfirmasi
+                }
+            });
+        });
+    });
+});
+</script>

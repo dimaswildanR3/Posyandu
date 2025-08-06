@@ -3,18 +3,42 @@ namespace App\Http\Controllers;
 
 use App\Models\Imunisasi;
 use App\Models\Balita;
+use App\Models\OrangTua;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class ImunisasiController extends Controller
 {
     public function index()
     {
-        $imunisasis = Imunisasi::with('balita')->orderBy('tanggal_imunisasi', 'desc')->paginate(10);
-        $balitas = Balita::all();
+        // Ambil user yang sedang login
+        $user = Auth::user();
+
+        // Cek apakah user adalah orang tua
+        $orangTua = OrangTua::where('user_id', $user->id)->first();
+
+        if ($user->role === 'ortu') {
+            // Ambil semua id balita milik orang tua
+            $balita_ids = Balita::where('orang_tua_id', $orangTua->id)->pluck('id');
+
+            // Ambil imunisasi hanya untuk anak-anaknya
+            $imunisasis = Imunisasi::with('balita')
+                ->whereIn('balita_id', $balita_ids)
+                ->orderBy('tanggal_imunisasi', 'desc')
+                ->paginate(10);
+
+            // Juga ambil data balita-nya untuk dropdown dsb
+            $balitas = Balita::where('orang_tua_id', $orangTua->id)->get();
+        } else {
+            // Kalau bukan ortu (misal admin), tampilkan semua
+            $imunisasis = Imunisasi::with('balita')->orderBy('tanggal_imunisasi', 'desc')->paginate(10);
+            $balitas = Balita::all();
+        }
+
         return view('imunisasi.index', compact('imunisasis', 'balitas'));
     }
-    
+
     public function create()
     {
         $balitas = Balita::all();

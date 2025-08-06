@@ -13,9 +13,12 @@
     @endif
 
     {{-- Tombol Tambah --}}
+    @if(Auth::user()->role !== 'ortu')
     <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createModal">
         + Tambah Imunisasi
     </button>
+@endif
+
 
     {{-- Tabel --}}
     <table class="table table-bordered table-striped">
@@ -39,8 +42,10 @@
                     <td>{{ $imunisasi->vitamin ?? '-' }}</td>
                     <td>
                         <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#showModal{{ $imunisasi->id }}">Lihat</button>
+                        @if(Auth::user()->role !== 'ortu')
                         <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{{ $imunisasi->id }}">Edit</button>
                         <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $imunisasi->id }}">Hapus</button>
+                        @endif
                     </td>
                 </tr>
             @empty

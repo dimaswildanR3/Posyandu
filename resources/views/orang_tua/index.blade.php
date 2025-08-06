@@ -48,8 +48,8 @@
                     <td>{{ $item->nama_suami ?? '-' }}</td>
                     <td>{{ $item->alamat }}</td>
                     <td>
-                        <form action="/orangtua/{{ $item->id }}" method="post" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                            @csrf
+                        <form action="/orangtua/{{ $item->id }}" method="post" class="d-inline form-delete">
+                        @csrf
                             @method('delete')
                             <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                         </form>
@@ -63,3 +63,31 @@
     </div>
 </div>
 @endsection
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const deleteForms = document.querySelectorAll('.form-delete');
+
+    deleteForms.forEach(form => {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // cegah submit langsung
+
+            Swal.fire({
+                title: 'Yakin ingin menghapus data ini?',
+                text: "Data akan dihapus permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#aaa',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // submit form jika dikonfirmasi
+                }
+            });
+        });
+    });
+});
+</script>

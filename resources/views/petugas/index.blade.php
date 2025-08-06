@@ -39,8 +39,9 @@
                     <td>{{ $p->lama_kerja }}</td>
                     <td>
                         <a href="{{ route('petugas.edit', $p->id) }}" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
-                        <form action="{{ route('petugas.destroy', $p->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus?')">
-                            @csrf @method('DELETE')
+                        <form action="{{ route('petugas.destroy', $p->id) }}" method="post" class="d-inline form-delete">
+                        @csrf
+                         @method('DELETE')
                             <button class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></button>
                         </form>
                     </td>
@@ -53,3 +54,30 @@
 </div>
 
 @endsection
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const deleteForms = document.querySelectorAll('.form-delete');
+
+    deleteForms.forEach(form => {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // cegah submit langsung
+
+            Swal.fire({
+                title: 'Yakin ingin menghapus data ini?',
+                text: "Data akan dihapus permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#aaa',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // submit form jika dikonfirmasi
+                }
+            });
+        });
+    });
+});
+</script>

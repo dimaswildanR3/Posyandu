@@ -6,16 +6,42 @@ use App\Models\Balita;
 use App\Models\OrangTua;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BalitaController extends Controller
 {
    
     //Menampilkan View Index
     public function index()
-    {
-        $balita = Balita::orderBy('created_at','ASC')->with('orangtua')->paginate(10);
-        return view('balita.index', compact('balita'));
+{
+    // Ambil user login
+    $user = Auth::user();
+
+    // Cek jika role-nya adalah ortu (ganti sesuai field kamu)
+    if ($user->role === 'ortu') {
+        // Ambil data orang tua berdasarkan user_id
+        $orangtua = OrangTua::where('user_id', $user->id)->first();
+
+        // Pastikan data orangtua ditemukan
+        if ($orangtua) {
+            // Ambil data balita berdasarkan orang_tua_id
+            $balita = Balita::where('orang_tua_id', $orangtua->id)
+                        ->orderBy('created_at', 'ASC')
+                        ->with('orangtua')
+                        ->paginate(10);
+        } else {
+            // Jika tidak ditemukan, tampilkan kosong
+            $balita = collect([]);
+        }
+    } else {
+        // Jika bukan ortu, tampilkan semua data
+        $balita = Balita::orderBy('created_at','ASC')
+                        ->with('orangtua')
+                        ->paginate(10);
     }
+
+    return view('balita.index', compact('balita'));
+}
 
   
     //Menampilkan View Create
