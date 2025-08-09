@@ -206,59 +206,72 @@
                 </form>
             </div>
             <br>
-        <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
-            <thead style="background: #fd6bc5">
-              <tr>
-                <th scope="col">No</th>
-                <th scope="col">Tanggal Penimbangan</th>
-                <th scope="col">Nama Balita</th>
-                <th scope="col">Berat Badan</th>
-                <th scope="col">Tinggi Badan</th>
-                <th scope="col">Ditimbang Oleh</th>
-                <th scope="col">Nama Kegiatan</th>
-                <th scope="col">Catatan</th>
-                <th scope="col">Umur (bln)</th>
-<th scope="col">Status Gizi</th>
-<th scope="col">Z-Score</th>
-<th scope="col">Status Stunting</th>
+            <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+    <thead style="background: #fd6bc5">
+        <tr>
+        <th>No</th>
+            <th>Nama Balita</th>
+            <th>JK</th>
+            <th>Tgl Lahir</th>
+            <th>Nama Ibu</th>
+            <th>Usia (Bln)</th>
+            <th>Berat (kg)</th>
+            <th>Tinggi (cm)</th>
+            <th>Median BB/U</th>
+            <th>SD BB/U</th>
+            <th>Z-Score BB/U</th>
+            <th>Status Gizi BB/U</th>
+            <th>Median TB/U</th>
+            <th>SD TB/U</th>
+            <th>Z-Score TB/U</th>
+            <th>Keterangan</th>
+            <th>Imunisasi Terakhir</th>
+            <th>Alamat</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($timbangan as $key => $item)
+        <tr class="clickable-row" data-href="/penimbangan/{{ $item->id }}">
+            <th scope="row">{{ $key + $timbangan->firstItem() }}</th>
+            <td>{{ $item->balita->nama_balita }}</td>
+            <td>{{ $item->balita->jenis_kelamin }}</td>
+            <td>{{ \Carbon\Carbon::parse($item->balita->tgl_lahir)->format('d/m/Y') }}</td>
+            <td>{{ $item->balita->orang_tua_id ?? '-' }}</td> <!-- Asumsi relasi orangTua -->
+            <td>{{ $item->umur }}</td>
+            <td>{{ number_format($item->bb, 2) }}</td>
+            <td>{{ number_format($item->tb, 2) }}</td>
+            <td>{{ number_format($item->median_bbu ?? 0, 2) }}</td>
+            <td>{{ number_format($item->sd_bbu ?? 0, 2) }}</td>
+            <td>{{ number_format($item->z_score ?? 0, 2) }}</td>
+            <td>{{ $item->status_gizi ?? '-' }}</td>
+            <td>{{ number_format($item->median_tbu ?? 0, 2) }}</td> <!-- Pastikan ada di model -->
+            <td>{{ number_format($item->sd_tbu ?? 0, 2) }}</td> <!-- Pastikan ada di model -->
+            <td>{{ number_format($item->z_score_stunting ?? 0, 2) }}</td>
+            <td>{{ $item->status_stunting ?? '-' }}</td>
+            <td>
+    {{ optional($item->balita->imunisasis->first())->jenis_imunisasi ?? '-' }}
+</td>
 
-                <th scope="col">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-                @foreach($timbangan as $key => $item)
-                <tr class="clickable-row" data-href="/penimbangan/{{$item->id}}">
-                <th scope="row" >{{ $key + $timbangan->firstItem()}}</th>
-                    <td>{{date('d F Y',strtotime($item->tanggal_timbang))}}</td>
-                    <td >{{$item->balita->nama_balita}}</td>
-                    <td>{{$item->bb}} kg</td>
-                    <td>{{$item->tb}} cm</td>
-                    <td>{{$item->user->name}}</td>
-                    <td>{{$item->acara_kegiatan}}</td>
-                    <td>{{$item->catatan}}</td>
-                    <td>{{ $item->umur }} bln</td>
-<td>{{ $item->status_gizi }}</td>
-<td>{{ $item->z_score }}</td>
-<td>{{ $item->status_stunting }}</td>
-
-
-                    <td>
-                    <form action="{{ route('penimbangan.destroy', $item->id) }}" method="post" class="d-inline form-delete">
+            <td>{{ $item->balita->alamat ?? '-' }}</td>
+            <td>
+                <form action="{{ route('penimbangan.destroy', $item->id) }}" method="post" class="d-inline form-delete">
                     @csrf
-    @method('DELETE')
-    <button type="submit" class="btn btn-danger">
-        <i class="fas fa-trash-alt"></i>
-    </button>
-</form>
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </form>
+                <a href="/penimbangan/{{ $item->id }}/edit" class="btn btn-primary">
+                    <i class="fas fa-edit"></i>
+                </a>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
 
 
-
-                        <a href="/penimbangan/{{$item->id}}/edit" class="btn btn-primary" ><i class="fas fa-edit"></i></a>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
         </div>
 
     </div>

@@ -22,6 +22,7 @@ class Penimbangan extends Model
         'status_stunting',
         'z_score',
         'acara_kegiatan',
+        'z_score_stunting',
     ];
     public function balita(){
         return $this->belongsTo(Balita::class);

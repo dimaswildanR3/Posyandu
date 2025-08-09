@@ -2,6 +2,7 @@
 
 @section('content')
 <style>
+
 .border-left-primary {
   border-left: 0.25rem solid #ff7ec9 !important;
 }
@@ -34,7 +35,6 @@
     </ol>
 </nav>
 
-<!-- Content Row -->
 <div class="row">
 
     <!-- Anak yang Terdata -->
@@ -63,10 +63,18 @@
 </div>
 
 <div class="row">
+    <!-- Grafik Gizi -->
     <div class="col-md-6">
         <div class="card mt-4">
-            <div class="card-header">
+            <div class="card-header d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary">Grafik Gizi per Bulan</h6>
+                <form method="GET" action="{{ url()->current() }}" class="form-inline">
+                    <select name="gender_gizi" onchange="this.form.submit()" class="form-control form-control-sm">
+                        <option value="" {{ (request('gender_gizi') == '') ? 'selected' : '' }}>Semua</option>
+                        <option value="Laki-laki" {{ (request('gender_gizi') == 'Laki-laki') ? 'selected' : '' }}>Laki-laki</option>
+                        <option value="Perempuan" {{ (request('gender_gizi') == 'Perempuan') ? 'selected' : '' }}>Perempuan</option>
+                    </select>
+                </form>
             </div>
             <div class="card-body">
                 <canvas id="chartGizi"></canvas>
@@ -74,10 +82,18 @@
         </div>
     </div>
 
+    <!-- Grafik Stunting -->
     <div class="col-md-6">
         <div class="card mt-4">
-            <div class="card-header">
+            <div class="card-header d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary">Grafik Stunting per Bulan</h6>
+                <form method="GET" action="{{ url()->current() }}" class="form-inline">
+                    <select name="gender_stunting" onchange="this.form.submit()" class="form-control form-control-sm">
+                        <option value="" {{ (request('gender_stunting') == '') ? 'selected' : '' }}>Semua</option>
+                        <option value="Laki-laki" {{ (request('gender_stunting') == 'Laki-laki') ? 'selected' : '' }}>Laki-laki</option>
+                        <option value="Perempuan" {{ (request('gender_stunting') == 'Perempuan') ? 'selected' : '' }}>Perempuan</option>
+                    </select>
+                </form>
             </div>
             <div class="card-body">
                 <canvas id="chartStunting"></canvas>
@@ -119,5 +135,4 @@
         }
     });
 </script>
-
 @endsection

@@ -16,20 +16,19 @@ class ImunisasiController extends Controller
         $user = Auth::user();
 
         // Cek apakah user adalah orang tua
-        $orangTua = OrangTua::where('user_id', $user->id)->first();
+        // $orangTua = OrangTua::where('user_id', $user->id)->first();
 
         if ($user->role === 'ortu') {
-            // Ambil semua id balita milik orang tua
-            $balita_ids = Balita::where('orang_tua_id', $orangTua->id)->pluck('id');
+            $balita_ids = Balita::where('user_id', $user->id)->pluck('id');
 
-            // Ambil imunisasi hanya untuk anak-anaknya
+            // Ambil imunisasi hanya untuk balita milik user ini
             $imunisasis = Imunisasi::with('balita')
                 ->whereIn('balita_id', $balita_ids)
                 ->orderBy('tanggal_imunisasi', 'desc')
                 ->paginate(10);
-
-            // Juga ambil data balita-nya untuk dropdown dsb
-            $balitas = Balita::where('orang_tua_id', $orangTua->id)->get();
+    
+            // Ambil daftar balita milik user (ortu)
+            $balitas = Balita::where('user_id', $user->id)->get();
         } else {
             // Kalau bukan ortu (misal admin), tampilkan semua
             $imunisasis = Imunisasi::with('balita')->orderBy('tanggal_imunisasi', 'desc')->paginate(10);

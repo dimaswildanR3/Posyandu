@@ -111,12 +111,12 @@
 
 @if(auth()->user()->role == 'admin')
     <a href="/balita"><i class="fas fa-baby-carriage"></i><span>Data Anak</span></a>
-    <a href="/orangtua"><i class="fas fa-baby-carriage"></i><span>Data Ibu</span></a>
+    <!-- <a href="/orangtua"><i class="fas fa-baby-carriage"></i><span>Data Ibu</span></a> -->
     <a href="/bidans"><i class="fas fa-baby-carriage"></i><span>Data Bidan</span></a>
+    <a href="/blog"><i class="fas fa-blog"></i><span>Data Jadwal Pelayanan</span></a>
     <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
-    <a href="/petugas"><i class="fas fa-balance-scale"></i><span>Data Petugas</span></a>
+    <!-- <a href="/petugas"><i class="fas fa-balance-scale"></i><span>Data Petugas</span></a> -->
     <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
-    <a href="/blog"><i class="fas fa-blog"></i><span>Data Jadwal Bidan</span></a>
     <a href="/akun"><i class="fas fa-user"></i><span>Data Kader</span></a>
 @endif
 
@@ -124,7 +124,7 @@
     <a href="/balita"><i class="fas fa-baby-carriage"></i><span>Data Anak</span></a>
     <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
     <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
-    <a href="/blog"><i class="fas fa-blog"></i><span>Data Jadwal Bidan</span></a>
+    <a href="/blog"><i class="fas fa-blog"></i><span>Data Jadwal Pelayanan</span></a>
 @endif
 
 @if(auth()->user()->role == 'ortu')
@@ -146,12 +146,12 @@
 
 @if(auth()->user()->role == 'admin')
     <a href="/balita"><i class="fas fa-baby-carriage"></i><span>Data Anak</span></a>
-    <a href="/orangtua"><i class="fas fa-baby-carriage"></i><span>Data Ibu</span></a>
+    <!-- <a href="/orangtua"><i class="fas fa-baby-carriage"></i><span>Data Ibu</span></a> -->
     <a href="/bidans"><i class="fas fa-baby-carriage"></i><span>Data Bidan</span></a>
+    <a href="/blog"><i class="fas fa-blog"></i><span>Data Jadwal Pelayanan</span></a>
     <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
-    <a href="/petugas"><i class="fas fa-balance-scale"></i><span>Data Petugas</span></a>
+    <!-- <a href="/petugas"><i class="fas fa-balance-scale"></i><span>Data Petugas</span></a> -->
     <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
-    <a href="/blog"><i class="fas fa-blog"></i><span>Data Jadwal Bidan</span></a>
     <a href="/akun"><i class="fas fa-user"></i><span>Data Kader</span></a>
 @endif
 
@@ -159,11 +159,12 @@
     <a href="/balita"><i class="fas fa-baby-carriage"></i><span>Data Anak</span></a>
     <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
     <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
-    <a href="/blog"><i class="fas fa-blog"></i><span>Data Jadwal Bidan</span></a>
+    <a href="/blog"><i class="fas fa-blog"></i><span>Data Jadwal Pelayanan</span></a>
 @endif
 
 @if(auth()->user()->role == 'ortu')
     <a href="/balita"><i class="fas fa-baby-carriage"></i><span>Data Anak</span></a>
+    <a href="/blog"><i class="fas fa-blog"></i><span>Data Jadwal Pelayanan</span></a>
     <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
     <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
 @endif

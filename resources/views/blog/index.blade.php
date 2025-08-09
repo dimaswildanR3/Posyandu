@@ -15,6 +15,7 @@
         </button>
 </div>
 @endif
+@if(Auth::user()->role !== 'ortu')
 <div class="card shadow p-3 mb-5 bg-white rounded border-left-primary">
   <div class="card-header">
     Jadwal Pelayanan Posyandu
@@ -61,7 +62,8 @@
 
         <div class="form-group">
             <label for="waktu">Jam Pelayanan</label>
-            <input autocomplete="off" placeholder="00:00" type="time" class="form-control @error('waktu') is-invalid @enderror" name="waktu"  id="waktu	" value="{{ old('waktu') }}">
+            <input autocomplete="off" placeholder="09:10" type="text" class="form-control @error('waktu') is-invalid @enderror" name="waktu" id="waktu" value="{{ old('waktu') }}">
+
             @error('waktu')
             <div class="invalid-feedback">
                 {{$message}}
@@ -71,6 +73,7 @@
         <button type="submit" class="btn btn-outline-success">Simpan</button>
     </form>
     </div>
+    @endif
     <div class="m-4">
       <table class="table table-hover">
         <thead style="background: #fd6bc5">
@@ -80,7 +83,9 @@
             <th scope="col">Tanggal Pelayanan</th>
             <th scope="col">Nama Pelayanan/Kegiatan</th>
             <th scope="col">Jam Pelayanan</th>
+            @if(Auth::user()->role !== 'ortu')
             <th scope="col">Aksi</th>
+            @endif
           </tr>
         </thead>
         <tbody>
@@ -94,6 +99,7 @@
           <td>{{date('d F Y',strtotime($item->tanggal_kegiatan))}}</td>
             <td>{{$item->nama_kegiatan}}</td>
             <td>{{$item->waktu}}</td>
+            @if(Auth::user()->role !== 'ortu')
             <td>
               <form action="/blog/{{$item->id}}" method="post" class="d-inline form-delete">
               @csrf
@@ -103,6 +109,7 @@
               {{-- <a href="/blog/{{$item->id}}" class="btn btn-primary" ><i class="fas fa-search"></i></a>  --}}
               <a href="/blog/{{$item->id}}/edit" class="btn btn-primary" ><i class="fas fa-edit"></i></a> 
             </td>
+            @endif
           </tr>
           @endforeach
         </tbody>

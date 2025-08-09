@@ -13,35 +13,23 @@ class BalitaController extends Controller
    
     //Menampilkan View Index
     public function index()
-{
-    // Ambil user login
-    $user = Auth::user();
-
-    // Cek jika role-nya adalah ortu (ganti sesuai field kamu)
-    if ($user->role === 'ortu') {
-        // Ambil data orang tua berdasarkan user_id
-        $orangtua = OrangTua::where('user_id', $user->id)->first();
-
-        // Pastikan data orangtua ditemukan
-        if ($orangtua) {
-            // Ambil data balita berdasarkan orang_tua_id
-            $balita = Balita::where('orang_tua_id', $orangtua->id)
-                        ->orderBy('created_at', 'ASC')
-                        ->with('orangtua')
-                        ->paginate(10);
+    {
+        $user = Auth::user();
+    
+        if ($user->role === 'ortu') {
+            // Ambil data balita berdasarkan user_id dari user ortu
+            $balita = Balita::where('user_id', $user->id)
+                            ->orderBy('created_at', 'ASC')
+                            ->paginate(10);
         } else {
-            // Jika tidak ditemukan, tampilkan kosong
-            $balita = collect([]);
+            // Untuk selain ortu, tampilkan semua balita
+            $balita = Balita::orderBy('created_at', 'ASC')
+                            ->paginate(10);
         }
-    } else {
-        // Jika bukan ortu, tampilkan semua data
-        $balita = Balita::orderBy('created_at','ASC')
-                        ->with('orangtua')
-                        ->paginate(10);
+    
+        return view('balita.index', compact('balita'));
     }
-
-    return view('balita.index', compact('balita'));
-}
+    
 
   
     //Menampilkan View Create
@@ -57,16 +45,18 @@ class BalitaController extends Controller
     {
         $request->validate([
             'nik_anak' => 'nullable|string|max:50',
-            'nama_balita'=>'required',
-            'tpt_lahir'=>'required',
+            'nama_balita' => 'required',
+            'tpt_lahir' => 'required',
             'tgl_lahir' => 'required|date_format:Y-m-d',
-            'orang_tua_id'=>'required',
-            'ket'=>'nullable|string',
-            'jenis_kelamin'=>'required',
-        ]);         
+            'orang_tua_id' => 'required|string|max:255',
+            'alamat' => 'nullable|string',
+            'ket' => 'nullable|string',
+            'jenis_kelamin' => 'required',
+        ]);
+    
         Balita::create($request->all());
-        return redirect('/balita')->with('status','Data Anak berhasil ditambahkan!');
-
+    
+        return redirect('/balita')->with('status', 'Data Anak berhasil ditambahkan!');
     }
 
     
@@ -87,26 +77,29 @@ class BalitaController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-        'nik_anak' => 'nullable|string|max:50',
-        'nama_balita'=>'required',
-        'tpt_lahir'=>'required',
-        'tgl_lahir' => 'required|date_format:Y-m-d',
-        'orang_tua_id'=>'required',
-        'ket'=>'nullable|string',
-        'jenis_kelamin'=>'required',
+            'nik_anak' => 'nullable|string|max:50',
+            'nama_balita' => 'required',
+            'tpt_lahir' => 'required',
+            'tgl_lahir' => 'required|date_format:Y-m-d',
+            'orang_tua_id' => 'required|string|max:255',
+            'alamat' => 'nullable|string',
+            'ket' => 'nullable|string',
+            'jenis_kelamin' => 'required',
         ]);
-        Balita::where('id',$id)
-                ->update([
-                    'nama_balita'=>$request->nama_balita,
-                    'tpt_lahir'=>$request->tpt_lahir,
-                    'tgl_lahir'=>$request->tgl_lahir,
-                    'orang_tua_id'=>$request->orang_tua_id,
-                    'nik_anak'=>$request->nik_anak,
-        
-                    'ket'=>$request->ket,
-                    'jenis_kelamin'=>$request->jenis_kelamin,
-                ]);
-        return redirect('/balita')->with('status','Data Anak berhasil diupdate!');
+    
+        Balita::where('id', $id)
+            ->update([
+                'nama_balita' => $request->nama_balita,
+                'tpt_lahir' => $request->tpt_lahir,
+                'tgl_lahir' => $request->tgl_lahir,
+                'orang_tua_id' => $request->orang_tua_id,
+                'alamat' => $request->alamat,
+                'nik_anak' => $request->nik_anak,
+                'ket' => $request->ket,
+                'jenis_kelamin' => $request->jenis_kelamin,
+            ]);
+    
+        return redirect('/balita')->with('status', 'Data Anak berhasil diupdate!');
     }
 
 
