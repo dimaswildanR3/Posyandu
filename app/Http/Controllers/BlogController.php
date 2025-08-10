@@ -55,6 +55,8 @@ class BlogController extends Controller
             'nama_kegiatan' => $bidan->nama_lengkap,
             'tanggal_kegiatan' => $request->tanggal_kegiatan,
             'waktu' => $request->waktu,
+            'waktu_akhir' => $request->waktu_akhir,
+
         ]);
     
         return redirect('/blog')->with('status','Data Jadwal Pelayanan berhasil ditambahkan!');
@@ -104,6 +106,7 @@ class BlogController extends Controller
                     'nama_kegiatan'=>$request->nama_kegiatan,
                     'tanggal_kegiatan'=>$request->tanggal_kegiatan,
                     'waktu'=>$request->waktu,
+                    'waktu_akhir' => $request->waktu_akhir,
                     
                 ]);
         return redirect('/blog')->with('status','Data Jadwal Pelayanan berhasil diupdate!');

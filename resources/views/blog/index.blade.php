@@ -60,16 +60,28 @@
     @enderror
 </div>
 
-        <div class="form-group">
-            <label for="waktu">Jam Pelayanan</label>
-            <input autocomplete="off" placeholder="09:10" type="text" class="form-control @error('waktu') is-invalid @enderror" name="waktu" id="waktu" value="{{ old('waktu') }}">
+<div class="form-group">
+    <label for="waktu">Jam Pelayanan Mulai</label>
+    <input autocomplete="off" placeholder="09:10" type="time" class="form-control @error('waktu') is-invalid @enderror" name="waktu" id="waktu" value="{{ old('waktu') }}">
 
-            @error('waktu')
-            <div class="invalid-feedback">
-                {{$message}}
-            </div>
-            @enderror
-        </div>
+    @error('waktu')
+    <div class="invalid-feedback">
+        {{ $message }}
+    </div>
+    @enderror
+</div>
+
+<div class="form-group">
+    <label for="waktu_akhir">Jam Pelayanan Akhir (opsional)</label>
+    <input autocomplete="off" placeholder="10:30" type="time" class="form-control @error('waktu_akhir') is-invalid @enderror" name="waktu_akhir" id="waktu_akhir" value="{{ old('waktu_akhir') }}">
+
+    @error('waktu_akhir')
+    <div class="invalid-feedback">
+        {{ $message }}
+    </div>
+    @enderror
+</div>
+
         <button type="submit" class="btn btn-outline-success">Simpan</button>
     </form>
     </div>
@@ -98,7 +110,13 @@
           <td>{{$item->user->name}}</td>
           <td>{{date('d F Y',strtotime($item->tanggal_kegiatan))}}</td>
             <td>{{$item->nama_kegiatan}}</td>
-            <td>{{$item->waktu}}</td>
+            <td>
+    {{ $item->waktu }} 
+    @if($item->waktu_akhir)
+        - {{ $item->waktu_akhir }}
+    @endif
+</td>
+
             @if(Auth::user()->role !== 'ortu')
             <td>
               <form action="/blog/{{$item->id}}" method="post" class="d-inline form-delete">

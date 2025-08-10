@@ -241,8 +241,8 @@
               <tr>
               <th scope="row">{{$i++}}</th>
                 <td>{{$item->nama_balita}}</td>
-                <td>{{$item->orangtua->nama ?? '-'}} </td>
-                <td>{{$item->orangtua->alamat ?? '-'}} </td>
+                <td>{{$item->orang_tua_id ?? '-'}} </td>
+                <td>{{$item->alamat ?? '-'}} </td>
               </tr>
               @endforeach
             </tbody>

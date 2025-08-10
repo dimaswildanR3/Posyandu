@@ -15,6 +15,7 @@ class Jadwal extends Model
         'waktu',
         'bidan_id',
         'user_id',
+        'waktu_akhir',
     ];
 
     public function user(){
