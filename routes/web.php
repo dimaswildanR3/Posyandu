@@ -33,6 +33,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/kms1', [\App\Http\Controllers\PenimbanganController::class, 'kms1'])
+    ->name('kms1')
+    ->middleware('auth');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/dashboard', [DashboardController::class,'index']);

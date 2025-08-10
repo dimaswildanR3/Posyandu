@@ -130,63 +130,72 @@ class AkunController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-{
-    $akun = User::findOrFail($id);
-
-    $rules = [
-        'name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255'],
-        'password' => ['nullable', 'string', 'min:8', 'confirmed'],
-        'role' => ['nullable', 'string', 'max:50'],
-    ];
-
-    // Untuk username, validasi unique kecuali untuk user ini sendiri
-    $rules['username'] = ['required', 'string', 'max:255', 'unique:users,username,' . $akun->id];
-
-    // Kalau role ortu, orangtua_id wajib dan harus ada di balitas
-    if ($request->role === 'ortu') {
-        $rules['orangtua_id'] = ['required', 'exists:balitas,id'];
-    }
-
-    $request->validate($rules);
-
-    // Kalau role ortu, cek nik_anak di balita terpilih
-    if ($request->role === 'ortu') {
-        $balita = Balita::find($request->orangtua_id);
-
-        if (!$balita) {
-            return back()->withInput()->withErrors(['orangtua_id' => 'Balita tidak ditemukan.']);
+    {
+        $akun = User::findOrFail($id);
+    
+        // Atur rules validasi
+        $rules = [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $akun->id],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'role' => ['nullable', 'string', 'max:50'],
+        ];
+    
+        if ($request->role !== 'ortu') {
+            // Username wajib dan unik, kecuali untuk user ini sendiri
+            $rules['username'] = ['required', 'string', 'max:255', 'unique:users,username,' . $akun->id];
+        } else {
+            // Kalau role ortu, pastikan orangtua_id wajib diisi
+            $rules['orangtua_id'] = ['required', 'exists:balitas,id'];
         }
-
-        if (empty($balita->nik_anak)) {
-            return back()->withInput()->withErrors(['orangtua_id' => 'NIK Anak pada balita yang dipilih kosong, tidak bisa menggunakan username.']);
+    
+        $request->validate($rules);
+    
+        $username = $request->username;
+    
+        if ($request->role === 'ortu') {
+            $balita = Balita::find($request->orangtua_id);
+    
+            if (!$balita) {
+                return back()->withInput()->withErrors(['orangtua_id' => 'Balita tidak ditemukan.']);
+            }
+    
+            if (empty($balita->nik_anak)) {
+                return back()->withInput()->withErrors(['orangtua_id' => 'NIK Anak pada balita yang dipilih kosong, tidak bisa membuat username.']);
+            }
+    
+            $username = $balita->nik_anak;
+    
+            // Cek apakah username sudah digunakan oleh user lain
+            if (User::where('username', $username)->where('id', '!=', $akun->id)->exists()) {
+                return back()->withInput()->withErrors(['orangtua_id' => 'Username (NIK Anak) sudah terdaftar, silakan hubungi admin.']);
+            }
         }
+    
+        // Update data user
+        $akun->name = $request->name;
+        $akun->email = $request->email;
+        $akun->role = $request->role;
+        $akun->username = $username;
+    
+        if ($request->password) {
+            $akun->password = Hash::make($request->password);
+        }
+    
+        $akun->save();
+    
+        // Reset semua user_id di balita yang sebelumnya terkait dengan user ini
+        Balita::where('user_id', $akun->id)->update(['user_id' => null]);
+    
+        // Hubungkan user dengan balita baru jika role ortu
+        if ($request->role === 'ortu') {
+            $balita->user_id = $akun->id;
+            $balita->save();
+        }
+    
+        return redirect('/akun')->with('status', 'Akun berhasil diubah!');
     }
-
-    // Update data user
-    $akun->name = $request->name;
-    $akun->email = $request->email;
-    $akun->role = $request->role;
-    $akun->username = $request->role === 'ortu' ? $balita->nik_anak : $request->username;
-
-    if ($request->password) {
-        $akun->password = Hash::make($request->password);
-    }
-
-    $akun->save();
-
-    // Reset semua user_id di balita yang sebelumnya terkait dengan user ini
-    Balita::where('user_id', $akun->id)->update(['user_id' => null]);
-
-    // Hubungkan user dengan balita baru jika role ortu
-    if ($request->role === 'ortu' && $request->orangtua_id) {
-        $balita->user_id = $akun->id;
-        $balita->save();
-    }
-
-    return redirect('/akun')->with('status', 'Akun berhasil diubah!');
-}
-
+    
 
     /**
      * Remove the specified resource from storage.

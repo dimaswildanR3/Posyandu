@@ -481,7 +481,56 @@ $tinggiBadan = $dataPenimbangan->pluck('tb')->map(function ($tb) {
         ));
     }
     
-
+    public function kms1(Request $request)
+    {
+        // Ambil user login
+        $userId = auth()->id();
+    
+        // Cari balita milik user ini
+        $balita = \App\Models\Balita::where('user_id', $userId)->firstOrFail();
+    
+        $dari = $request->query('dari');
+        $sampai = $request->query('sampai');
+    
+        // Query penimbangan berdasarkan balita_id
+        $query = \App\Models\Penimbangan::where('balita_id', $balita->id);
+    
+        if ($dari) {
+            $query->whereDate('tanggal_timbang', '>=', $dari);
+        }
+        if ($sampai) {
+            $query->whereDate('tanggal_timbang', '<=', $sampai);
+        }
+    
+        $penimbangans = $query->orderBy('tanggal_timbang')->get();
+    
+        // Ambil umur & berat dari database
+        $umur = $penimbangans->pluck('umur')->toArray();
+        $berat = $penimbangans->pluck('bb')->map(fn($bb) => (float)$bb)->toArray();
+    
+      // Gunakan default 36 kalau tidak ada data umur
+      $maxAge = !empty($umur) ? max($umur) : 36;
+    
+        $severelyUnderweight = [];
+        $underweight = [];
+        $normal = [];
+        $overweight = [];
+    
+        for ($age = 0; $age <= $maxAge; $age++) {
+            $baseWeight = 3.3 + ($age * 0.5);
+            $severelyUnderweight[] = ['x' => $age, 'y' => max(2, $baseWeight - 2)];
+            $underweight[] = ['x' => $age, 'y' => $baseWeight - 1];
+            $normal[] = ['x' => $age, 'y' => $baseWeight + 1.5];
+            $overweight[] = ['x' => $age, 'y' => $baseWeight + 3];
+        }
+    
+        return view('timbangan.kms', compact(
+            'balita', 'penimbangans', 'dari', 'sampai',
+            'umur', 'berat',
+            'severelyUnderweight', 'underweight', 'normal', 'overweight'
+        ));
+    }
+    
     
     public function filterCetak(Request $request)
 {

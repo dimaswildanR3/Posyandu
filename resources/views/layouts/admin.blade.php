@@ -131,8 +131,13 @@
 
 @if(auth()->user()->role == 'ortu')
     <a href="/balita"><i class="fas fa-baby-carriage"></i><span>Data Anak</span></a>
-    <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
+    <!-- <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a> -->
     <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
+    <a href="{{ route('kms1') }}">
+    <i class="fas fa-chart-line"></i>
+    <span>KMS</span>
+</a>
+
 @endif
 
       </div>
@@ -169,8 +174,13 @@
 @if(auth()->user()->role == 'ortu')
     <a href="/balita"><i class="fas fa-baby-carriage"></i><span>Data Anak</span></a>
     <a href="/blog"><i class="fas fa-blog"></i><span>Data Jadwal Pelayanan</span></a>
-    <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
+    <!-- <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a> -->
     <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
+    <a href="{{ route('kms1') }}">
+    <i class="fas fa-chart-line"></i>
+    <span>KMS</span>
+</a>
+
 @endif
 
    
