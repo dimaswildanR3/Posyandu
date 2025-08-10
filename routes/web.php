@@ -38,6 +38,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/dashboard', [DashboardController::class,'index']);
 
 Route::get('/penimbangan/cetak', [PenimbanganController::class, 'cetakPdf']);
+// Route halaman filter cetak laporan
+Route::get('/penimbangan/filter-cetak', [PenimbanganController::class, 'filterCetak'])->name('penimbangan.filterCetak');
 
 //Route input Data Create Read Update Delete @resource
 Route::resource('/balita' ,BalitaController::class);

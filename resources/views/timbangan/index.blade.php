@@ -131,8 +131,8 @@
             </div>
         </div>
     </div>
-@if(Auth::user()->role !== 'ortu')
-    <!-- Filter Cetak Card (Kanan) -->
+<!-- @if(Auth::user()->role !== 'ortu')
+    Filter Cetak Card (Kanan)
     <div class="col-md-6">
         <div class="card shadow-sm border-left-primary h-100">
             <div class="card-body">
@@ -177,7 +177,7 @@
         </div>
     </div>
 </div>
-@endif
+@endif -->
 <br><br>
 <div style="padding-bottom:200px">
     <div class="card shadow p-3 mb-5 bg-white rounded border-left-primary">

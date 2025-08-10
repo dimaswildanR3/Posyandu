@@ -443,67 +443,51 @@ $tinggiBadan = $dataPenimbangan->pluck('tb')->map(function ($tb) {
         
     public function kms(Request $request, $balita_id)
     {
-        // Cari data balita berdasarkan ID atau gagal 404
         $balita = \App\Models\Balita::findOrFail($balita_id);
     
-        // Ambil filter tanggal dari query parameter jika ada
         $dari = $request->query('dari');
         $sampai = $request->query('sampai');
     
-        // Query data penimbangan untuk balita ini dengan filter tanggal
         $query = \App\Models\Penimbangan::where('balita_id', $balita_id);
     
-        if ($dari) {
-            $query->whereDate('tanggal_timbang', '>=', $dari);
-        }
-        if ($sampai) {
-            $query->whereDate('tanggal_timbang', '<=', $sampai);
-        }
+        if ($dari) $query->whereDate('tanggal_timbang', '>=', $dari);
+        if ($sampai) $query->whereDate('tanggal_timbang', '<=', $sampai);
     
-        // Ambil data penimbangan terurut tanggal naik
         $penimbangans = $query->orderBy('tanggal_timbang')->get();
     
-        // Siapkan data label tanggal untuk grafik, format tanggal agar lebih enak dibaca
-        $labels = $penimbangans->pluck('tanggal_timbang')->map(function ($t) {
-            return \Carbon\Carbon::parse($t)->format('d M Y');
-        });
+        // Ambil langsung umur dari field database
+        $umur = $penimbangans->pluck('umur')->toArray();
+        $berat = $penimbangans->pluck('bb')->map(fn($bb) => (float)$bb)->toArray();
     
-        // Siapkan data berat badan dalam format float
-        $berat = $penimbangans->pluck('bb')->map(fn($bb) => (float) $bb);
+        $maxAge = max($umur) ?? 36;
     
-        // Siapkan data tinggi badan dalam format float
-        $tinggi = $penimbangans->pluck('tb')->map(fn($tb) => (float) $tb);
+        $severelyUnderweight = [];
+        $underweight = [];
+        $normal = [];
+        $overweight = [];
     
-        // Siapkan data status gizi & stunting dan umur di collection agar bisa dipakai di view (optional)
-        foreach ($penimbangans as $p) {
-            $p->umur = \Carbon\Carbon::parse($balita->tgl_lahir)->diffInMonths(\Carbon\Carbon::parse($p->tanggal_timbang));
-    
-            // Penilaian sederhana status gizi berdasarkan berat badan
-            if ($p->bb < 8) {
-                $p->status_gizi = 'Gizi Buruk';
-            } elseif ($p->bb < 10) {
-                $p->status_gizi = 'Gizi Kurang';
-            } elseif ($p->bb < 13) {
-                $p->status_gizi = 'Gizi Baik';
-            } else {
-                $p->status_gizi = 'Gizi Lebih';
-            }
-    
-            // Penilaian sederhana status stunting berdasarkan tinggi badan
-            $p->status_stunting = $p->tb < 80 ? 'Stunting' : 'Normal';
+        for ($age = 0; $age <= $maxAge; $age++) {
+            $baseWeight = 3.3 + ($age * 0.5);
+            $severelyUnderweight[] = ['x' => $age, 'y' => max(2, $baseWeight - 2)];
+            $underweight[] = ['x' => $age, 'y' => $baseWeight - 1];
+            $normal[] = ['x' => $age, 'y' => $baseWeight + 1.5];
+            $overweight[] = ['x' => $age, 'y' => $baseWeight + 3];
         }
     
         return view('timbangan.kms', compact(
-            'balita',
-            'penimbangans',
-            'dari',
-            'sampai',
-            'labels',
-            'berat',
-            'tinggi'
+            'balita', 'penimbangans', 'dari', 'sampai',
+            'umur', 'berat',
+            'severelyUnderweight', 'underweight', 'normal', 'overweight'
         ));
     }
     
+
+    
+    public function filterCetak(Request $request)
+{
+    return view('penimbangan.index'); // nanti buat view ini
+}
+
 
 public function cetakPdf(Request $request) 
 {

@@ -117,6 +117,8 @@
     <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
     <!-- <a href="/petugas"><i class="fas fa-balance-scale"></i><span>Data Petugas</span></a> -->
     <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
+    <a href="/penimbangan/filter-cetak"><i class="fas fa-filter"></i><span>Filter Cetak Laporan</span></a>
+
     <a href="/akun"><i class="fas fa-user"></i><span>Data Akun</span></a>
 @endif
 
@@ -152,6 +154,8 @@
     <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
     <!-- <a href="/petugas"><i class="fas fa-balance-scale"></i><span>Data Petugas</span></a> -->
     <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
+    <a href="/penimbangan/filter-cetak"><i class="fas fa-filter"></i><span>Filter Cetak Laporan</span></a>
+
     <a href="/akun"><i class="fas fa-user"></i><span>Data Akun</span></a>
 @endif
 
