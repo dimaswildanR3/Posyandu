@@ -117,7 +117,7 @@
     <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
     <!-- <a href="/petugas"><i class="fas fa-balance-scale"></i><span>Data Petugas</span></a> -->
     <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
-    <a href="/akun"><i class="fas fa-user"></i><span>Data Kader</span></a>
+    <a href="/akun"><i class="fas fa-user"></i><span>Data Akun</span></a>
 @endif
 
 @if(auth()->user()->role == 'bidan')
@@ -152,7 +152,7 @@
     <a href="/penimbangan"><i class="fas fa-balance-scale"></i><span>Data Penimbangan Gizi</span></a>
     <!-- <a href="/petugas"><i class="fas fa-balance-scale"></i><span>Data Petugas</span></a> -->
     <a href="/imunisasi"><i class="fas fa-balance-scale"></i><span>Data Imunisasi</span></a>
-    <a href="/akun"><i class="fas fa-user"></i><span>Data Kader</span></a>
+    <a href="/akun"><i class="fas fa-user"></i><span>Data Akun</span></a>
 @endif
 
 @if(auth()->user()->role == 'bidan')

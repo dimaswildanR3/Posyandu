@@ -23,7 +23,7 @@
         <div class="d-flex justify-content-lg-end mb-3">
             <a class="btn btn-outline-secondary" href="/akun/create"><span class="icon text">
                 <i class="fas fa-plus"></i>
-            </span>Tambah Data Kader</a>
+            </span>Tambah Data Akun</a>
     
         </div>
         <div class="table-responsive">
