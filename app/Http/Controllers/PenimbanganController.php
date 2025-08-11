@@ -164,9 +164,13 @@ $timbangan = Penimbangan::with(['balita.imunisasis' => function ($query) {
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-       
-    }
+{
+    $tanggalPelayanan = Jadwal::all();
+    $balita = Balita::all();
+
+    return view('timbangan.create', compact('tanggalPelayanan', 'balita'));
+}
+
 
     /**
      * Store a newly created resource in storage.

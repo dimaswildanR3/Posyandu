@@ -33,9 +33,9 @@
                             <option value="Risiko Gizi Lebih">Gizi Lebih</option>
                         </optgroup>
                         <optgroup label="Status Stunting">
-                            <option value="Sangat Pendek">Sangat Pendek</option>
-                            <option value="Pendek">Pendek</option>
-                            <option value="Normal (TB)">Normal</option>
+                            <option value="Stunting Berat">Stunting Berat</option>
+                            <option value="Risiko Stunting">Risiko Stunting</option>
+                            <option value="Normal">Normal</option>
                             <option value="Tinggi">Tinggi</option>
                         </optgroup>
                    </select>

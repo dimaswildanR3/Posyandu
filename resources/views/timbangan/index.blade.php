@@ -7,7 +7,7 @@
       <li class="breadcrumb-item active" aria-current="page">Data Penimbangan Gizi</li>
     </ol>
 </nav>
-@if(Auth::user()->role !== 'ortu')
+<!-- @if(Auth::user()->role !== 'ortu')
 <div class="card shadow p-3 mb-5 bg-white rounded border-left-primary">
     
     <div class="row">
@@ -93,7 +93,7 @@
         </div>
     </div>
 </div>
-@endif
+@endif -->
 <div class="">
     @if (session('status'))
         <div class="alert alert-success">
@@ -104,9 +104,10 @@
         </div>
     @endif
 </div>
+
 <div class="row g-3">
     <!-- KMS Card (Kiri) -->
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div class="card shadow-sm border-left-primary h-100">
             <div class="card-body">
                 <h5 class="mb-3"><i class="fas fa-child"></i> Lihat Kartu Menuju Sehat (KMS)</h5>
@@ -178,106 +179,129 @@
     </div>
 </div>
 @endif -->
-<br><br>
-<div style="padding-bottom:200px">
-    <div class="card shadow p-3 mb-5 bg-white rounded border-left-primary">
-        <div class="table-responsive">
-            <div class="col-6">
-                <form action="{{url('/filter/periodeTimbang')}}" method="get">
-                    <div class="row">
-                        <div class="col">
-                            <div class="input-group">
-                            <input class="form-control dateselect" type="text" name="dari" id="" autocomplete="off" value="{{$dari}}">
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2"><i class="fas fa-calendar"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="input-group">
-                                <input class="form-control dateselect" type="text" name="sampai" id="" autocomplete="off"value="{{$sampai}}">
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2"><i class="fas fa-calendar"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-outline-secondary" ><i class="fas fa-search"></i></button>
-                    </div>
-                </form>
-            </div>
-            <br>
-            <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
-    <thead style="background: #fd6bc5">
-        <tr>
-        <th>No</th>
-            <th>Nama Balita</th>
-            <th>JK</th>
-            <th>Tgl Lahir</th>
-            <th>Nama Ibu</th>
-            <th>Usia (Bln)</th>
-            <th>Berat (kg)</th>
-            <th>Tinggi (cm)</th>
-            <th>Median BB/U</th>
-            <th>SD BB/U</th>
-            <th>Z-Score BB/U</th>
-            <th>Status Gizi BB/U</th>
-            <th>Median TB/U</th>
-            <th>SD TB/U</th>
-            <th>Z-Score TB/U</th>
-            <th>Keterangan</th>
-            <th>Imunisasi Terakhir</th>
-            <th>Alamat</th>
-            <th>Aksi</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($timbangan as $key => $item)
-        <tr class="clickable-row" data-href="/penimbangan/{{ $item->id }}">
-            <th scope="row">{{ $key + $timbangan->firstItem() }}</th>
-            <td>{{ $item->balita->nama_balita }}</td>
-            <td>{{ $item->balita->jenis_kelamin }}</td>
-            <td>{{ \Carbon\Carbon::parse($item->balita->tgl_lahir)->format('d/m/Y') }}</td>
-            <td>{{ $item->balita->orang_tua_id ?? '-' }}</td> <!-- Asumsi relasi orangTua -->
-            <td>{{ $item->umur }}</td>
-            <td>{{ number_format($item->bb, 2) }}</td>
-            <td>{{ number_format($item->tb, 2) }}</td>
-            <td>{{ number_format($item->median_bbu ?? 0, 2) }}</td>
-            <td>{{ number_format($item->sd_bbu ?? 0, 2) }}</td>
-            <td>{{ number_format($item->z_score ?? 0, 2) }}</td>
-            <td>{{ $item->status_gizi ?? '-' }}</td>
-            <td>{{ number_format($item->median_tbu ?? 0, 2) }}</td> <!-- Pastikan ada di model -->
-            <td>{{ number_format($item->sd_tbu ?? 0, 2) }}</td> <!-- Pastikan ada di model -->
-            <td>{{ number_format($item->z_score_stunting ?? 0, 2) }}</td>
-            <td>{{ $item->status_stunting ?? '-' }}</td>
-            <td>
-    {{ optional($item->balita->imunisasis->first())->jenis_imunisasi ?? '-' }}
-</td>
+<br>
+<div style="padding-bottom:200px; padding-top:20px">
+    <div class="card border-left-primary shadow p-3 mb-5 bg-white rounded">
 
-            <td>{{ $item->balita->alamat ?? '-' }}</td>
-            <td>
-                <form action="{{ route('penimbangan.destroy', $item->id) }}" method="post" class="d-inline form-delete">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </form>
-                <a href="/penimbangan/{{ $item->id }}/edit" class="btn btn-primary">
-                    <i class="fas fa-edit"></i>
+        {{-- Tombol Tambah Data hanya untuk selain ortu --}}
+        @if(Auth::user()->role !== 'ortu')
+            <div class="d-flex justify-content-lg-end mb-3">
+                <a class="btn btn-outline-secondary" href="{{ url('penimbangan/create') }}">
+                    <span class="icon text">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    Tambah Data
                 </a>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+            </div>
+        @endif
 
-
+        {{-- Filter Periode --}}
+        <div class="col-6">
+            <form action="{{ url('/filter/periodeTimbang') }}" method="get">
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group">
+                            <input 
+                                type="text" 
+                                name="dari" 
+                                class="form-control dateselect" 
+                                autocomplete="off" 
+                                value="{{ $dari }}"
+                            >
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group">
+                            <input 
+                                type="text" 
+                                name="sampai" 
+                                class="form-control dateselect" 
+                                autocomplete="off" 
+                                value="{{ $sampai }}"
+                            >
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-outline-secondary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
         </div>
 
+        <br>
+
+        {{-- Tabel Data Penimbangan --}}
+        <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+            <thead style="background: #fd6bc5; color: white;">
+                <tr>
+                    <th>No</th>
+                    <th>Nama Balita</th>
+                    <th>JK</th>
+                    <th>Tgl Lahir</th>
+                    <th>Nama Ibu</th>
+                    <th>Usia (Bln)</th>
+                    <th>Berat (kg)</th>
+                    <th>Tinggi (cm)</th>
+                    <th>Median BB/U</th>
+                    <th>SD BB/U</th>
+                    <th>Z-Score BB/U</th>
+                    <th>Status Gizi BB/U</th>
+                    <th>Median TB/U</th>
+                    <th>SD TB/U</th>
+                    <th>Z-Score TB/U</th>
+                    <th>Keterangan</th>
+                    <th>Imunisasi Terakhir</th>
+                    <th>Alamat</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($timbangan as $key => $item)
+                    <tr class="clickable-row" data-href="{{ url('/penimbangan/' . $item->id) }}">
+                        <th scope="row">{{ $key + $timbangan->firstItem() }}</th>
+                        <td>{{ $item->balita->nama_balita }}</td>
+                        <td>{{ $item->balita->jenis_kelamin }}</td>
+                        <td>{{ \Carbon\Carbon::parse($item->balita->tgl_lahir)->format('d/m/Y') }}</td>
+                        <td>{{ $item->balita->orang_tua_id ?? '-' }}</td>
+                        <td>{{ $item->umur }}</td>
+                        <td>{{ number_format($item->bb, 2) }}</td>
+                        <td>{{ number_format($item->tb, 2) }}</td>
+                        <td>{{ number_format($item->median_bbu ?? 0, 2) }}</td>
+                        <td>{{ number_format($item->sd_bbu ?? 0, 2) }}</td>
+                        <td>{{ number_format($item->z_score ?? 0, 2) }}</td>
+                        <td>{{ $item->status_gizi ?? '-' }}</td>
+                        <td>{{ number_format($item->median_tbu ?? 0, 2) }}</td>
+                        <td>{{ number_format($item->sd_tbu ?? 0, 2) }}</td>
+                        <td>{{ number_format($item->z_score_stunting ?? 0, 2) }}</td>
+                        <td>{{ $item->status_stunting ?? '-' }}</td>
+                        <td>{{ optional($item->balita->imunisasis->first())->jenis_imunisasi ?? '-' }}</td>
+                        <td>{{ $item->balita->alamat ?? '-' }}</td>
+                        <td>
+                            <form action="{{ route('penimbangan.destroy', $item->id) }}" method="post" class="d-inline form-delete">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                            <a href="{{ url('/penimbangan/' . $item->id . '/edit') }}" class="btn btn-primary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        {{-- Pagination --}}
+        {{ $timbangan->links() }}
     </div>
-    <!-- Setelah tabel dan pagination -->
-
-
 </div>
 
 
