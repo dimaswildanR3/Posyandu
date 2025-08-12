@@ -30,7 +30,8 @@ class BlogController extends Controller
      */
     public function create()
     {
-        //
+        $bidans = Bidan::all();
+        return view('blog.create', compact('bidans'));
     }
 
     /**
