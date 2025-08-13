@@ -273,11 +273,11 @@
                         <td>{{ number_format($item->bb, 2) }}</td>
                         <td>{{ number_format($item->tb, 2) }}</td>
                         <td>{{ number_format($item->median_bbu ?? 0, 2) }}</td>
-                        <td>{{ number_format($item->sd_bbu ?? 0, 2) }}</td>
+<td>{{ number_format($item->sd_bbu ?? 0, 2) }}</td>
                         <td>{{ number_format($item->z_score ?? 0, 2) }}</td>
                         <td>{{ $item->status_gizi ?? '-' }}</td>
                         <td>{{ number_format($item->median_tbu ?? 0, 2) }}</td>
-                        <td>{{ number_format($item->sd_tbu ?? 0, 2) }}</td>
+<td>{{ number_format($item->sd_tbu ?? 0, 2) }}</td>
                         <td>{{ number_format($item->z_score_stunting ?? 0, 2) }}</td>
                         <td>{{ $item->status_stunting ?? '-' }}</td>
                         <td>{{ optional($item->balita->imunisasis->first())->jenis_imunisasi ?? '-' }}</td>

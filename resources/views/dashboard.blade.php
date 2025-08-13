@@ -61,7 +61,7 @@
     </div>
 
 </div>
-
+ @if(Auth::user()->role !== 'ortu')
 <div class="row">
     <!-- Grafik Gizi -->
     <div class="col-md-6">
@@ -101,7 +101,7 @@
         </div>
     </div>
 </div>
-
+@endif
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const chartGizi = @json($chartGizi);

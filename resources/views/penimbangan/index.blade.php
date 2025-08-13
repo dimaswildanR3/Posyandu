@@ -36,7 +36,7 @@
                             <option value="Stunting Berat">Stunting Berat</option>
                             <option value="Risiko Stunting">Risiko Stunting</option>
                             <option value="Normal">Normal</option>
-                            <option value="Tinggi">Tinggi</option>
+                            <option value="Risiko Tinggi">Risiko Tinggi</option>
                         </optgroup>
                    </select>
                 </div>

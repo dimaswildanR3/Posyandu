@@ -22,27 +22,40 @@ class PenimbanganController extends Controller
         $beratBadan = [];
     
         $user = Auth::user();
-        // $orangTua = OrangTua::where('user_id', $user->id)->first();
     
         if ($user->role === 'ortu') {
             $balita = Balita::where('user_id', $user->id)->get();
             $balitaIds = $balita->pluck('id');
     
-            $timbangan = Penimbangan::with('balita', 'user')
-                ->whereIn('balita_id', $balitaIds)
-                ->orderBy('tanggal_timbang', 'DESC')
-                ->paginate(10);
+            $timbangan = Penimbangan::with([
+                'balita.imunisasis' => function ($query) {
+                    $query->orderBy('tanggal_imunisasi', 'desc')->limit(1);
+                },
+                'user'
+            ])
+            ->whereIn('balita_id', $balitaIds)
+            ->orderBy('tanggal_timbang', 'DESC')
+            ->paginate(10);
     
             $jenisKelaminLaki = $balita->where('jenis_kelamin', 'Laki-laki')->count();
             $jenisKelaminPerem = $balita->where('jenis_kelamin', 'Perempuan')->count();
         } else {
             $balita = Balita::all();
-            $timbangan = Penimbangan::with('balita', 'user')->orderBy('tanggal_timbang', 'DESC')->paginate(10);
+    
+            $timbangan = Penimbangan::with([
+                'balita.imunisasis' => function ($query) {
+                    $query->orderBy('tanggal_imunisasi', 'desc')->limit(1);
+                },
+                'user'
+            ])
+            ->orderBy('tanggal_timbang', 'DESC')
+            ->paginate(10);
+    
             $jenisKelaminLaki = Balita::where('jenis_kelamin', 'Laki-laki')->count();
             $jenisKelaminPerem = Balita::where('jenis_kelamin', 'Perempuan')->count();
         }
     
-        // Tambahan: augmentasi data per item dengan perhitungan WHO BB/U dan TB/U
+        // Hitung median & SD BB/U dan TB/U
         foreach ($timbangan as $item) {
             $jenisKelaminSingkat = $item->balita->jenis_kelamin;
             $umur = $item->umur;
@@ -53,7 +66,6 @@ class PenimbanganController extends Controller
             $item->sd_bbu = $refBBU['sd'];
             $item->z_score_bbu = ($item->bb - $item->median_bbu) / $item->sd_bbu;
     
-            // Kategori status gizi BB/U
             if ($item->z_score_bbu < -3) {
                 $item->status_gizi_bbu = 'Gizi Buruk';
             } elseif ($item->z_score_bbu >= -3 && $item->z_score_bbu < -2) {
@@ -72,7 +84,6 @@ class PenimbanganController extends Controller
             $item->sd_tbu = $refTBU['sd'];
             $item->z_score_tbu = ($item->tb - $item->median_tbu) / $item->sd_tbu;
     
-            // Kategori status stunting TB/U
             if ($item->z_score_tbu < -3) {
                 $item->status_stunting = 'Stunting Berat';
             } elseif ($item->z_score_tbu >= -3 && $item->z_score_tbu < -2) {
@@ -82,7 +93,7 @@ class PenimbanganController extends Controller
             } elseif ($item->z_score_tbu > 1 && $item->z_score_tbu <= 2) {
                 $item->status_stunting = 'Risiko Tinggi';
             } else {
-                $item->status_stunting = 'Tinggi';
+                $item->status_stunting = 'Risiko Tinggi';
             }
         }
     
@@ -96,13 +107,6 @@ class PenimbanganController extends Controller
         $perem[] = $jenisKelaminPerem;
     
         $tanggalPelayanan = Jadwal::all();
-        // Ambil penimbangan dengan eager loading imunisasi terakhir per balita
-$timbangan = Penimbangan::with(['balita.imunisasis' => function ($query) {
-    $query->orderBy('tanggal_imunisasi', 'desc')->limit(1);
-}, 'user'])
-->orderBy('tanggal_timbang', 'DESC')
-->paginate(10);
-
     
         return view('timbangan.index', compact(
             'timbangan',
@@ -117,6 +121,7 @@ $timbangan = Penimbangan::with(['balita.imunisasis' => function ($query) {
             'sampai'
         ));
     }
+    
     
 
 
@@ -546,9 +551,9 @@ public function cetakPdf(Request $request)
 {
     $tahun = $request->tahun;
     $status = $request->status;
-
-    $statusGiziList = ['Normal', 'Gizi Kurang', 'Gizi Buruk', 'Gizi Lebih'];
-    $statusStuntingList = ['Sangat Pendek', 'Pendek', 'Normal', 'Tinggi'];
+    // var_dump($status);
+    $statusGiziList = ['Gizi Normal / Baik', 'Gizi Kurang', 'Gizi Buruk', 'Gizi Lebih'];
+    $statusStuntingList = ['Stunting Berat', 'Risiko Stunting', 'Normal', 'Risiko Tinggi'];
 
     $data = Penimbangan::with(['balita.imunisasis' => function ($q) {
         $q->orderBy('tanggal_imunisasi', 'desc')->limit(1);
@@ -565,7 +570,8 @@ public function cetakPdf(Request $request)
     ->orderBy('tanggal_timbang')
     ->get()
     ->groupBy('balita_id');
-
+// var_dump($data);
+// die;
     // Hitung nilai median, sd, z-score, status gizi, status stunting
     foreach ($data as $penimbangans) {
         foreach ($penimbangans as $item) {
@@ -603,7 +609,7 @@ public function cetakPdf(Request $request)
             } elseif ($item->z_score_tbu > 1 && $item->z_score_tbu <= 2) {
                 $item->status_stunting = 'Risiko Tinggi';
             } else {
-                $item->status_stunting = 'Tinggi';
+                $item->status_stunting = 'Risiko Tinggi';
             }
         }
     }
