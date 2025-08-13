@@ -301,7 +301,10 @@ $tinggiBadan = $dataPenimbangan->pluck('tb')->map(function ($tb) {
         $zScoreTBU = $this->hitungZScoreTBU($umur, $request->tb, $jenisKelamin);
         $statusStunting = $this->hitungStatusStunting($zScoreTBU);
         
-        Penimbangan::create([
+        $penimbangan = Penimbangan::findOrFail($id);
+
+        // Update datanya
+        $penimbangan->update([
             'balita_id' => $request->balita_id,
             'bb' => $request->bb,
             'tb' => $request->tb,
@@ -315,7 +318,6 @@ $tinggiBadan = $dataPenimbangan->pluck('tb')->map(function ($tb) {
             'catatan' => $request->catatan,
             'acara_kegiatan' => $request->acara_kegiatan,
         ]);
-        
     
         return redirect('/penimbangan')->with('status', 'Data Penimbangan berhasil diupdate!');
     }
@@ -377,29 +379,29 @@ $tinggiBadan = $dataPenimbangan->pluck('tb')->map(function ($tb) {
         $tabel = [
             'Laki-Laki' => [
                 0 => ['median' => 49.9, 'sd' => 1.9],
-                6 => ['median' => 67.6, 'sd' => 2.5],
-                12 => ['median' => 76.1, 'sd' => 2.9],
-                18 => ['median' => 81.7, 'sd' => 3.1],
-                24 => ['median' => 87.1, 'sd' => 3.3],
-                30 => ['median' => 91.9, 'sd' => 3.5],
-                36 => ['median' => 96.1, 'sd' => 3.7],
-                42 => ['median' => 99.9, 'sd' => 3.9],
-                48 => ['median' => 103.3, 'sd' => 4.0],
-                54 => ['median' => 106.5, 'sd' => 4.1],
-                60 => ['median' => 109.4, 'sd' => 4.2],
+                6 => ['median' => 66.4, 'sd' => 2.6],
+                12 => ['median' => 75.3, 'sd' => 3.1],
+                18 => ['median' => 81.7, 'sd' => 3.2],
+                24 => ['median' => 86.4, 'sd' => 3.5],
+                30 => ['median' => 90.0, 'sd' => 3.6],
+                36 => ['median' => 95.1, 'sd' => 3.7],
+                42 => ['median' => 98.7, 'sd' => 3.8],
+                48 => ['median' => 102.3, 'sd' => 3.9],
+                54 => ['median' => 105.8, 'sd' => 4.0],
+                60 => ['median' => 109.2, 'sd' => 4.1],
             ],
             'Perempuan' => [
-                0 => ['median' => 49.1, 'sd' => 1.8],
-                6 => ['median' => 65.7, 'sd' => 2.4],
-                12 => ['median' => 74.0, 'sd' => 2.8],
-                18 => ['median' => 79.7, 'sd' => 3.1],
-                24 => ['median' => 85.0, 'sd' => 3.3],
-                30 => ['median' => 89.8, 'sd' => 3.5],
-                36 => ['median' => 94.1, 'sd' => 3.7],
-                42 => ['median' => 98.0, 'sd' => 3.9],
-                48 => ['median' => 101.4, 'sd' => 4.0],
-                54 => ['median' => 104.7, 'sd' => 4.1],
-                60 => ['median' => 107.8, 'sd' => 4.2],
+                0 => ['median' => 49.1, 'sd' => 1.9],
+                6 => ['median' => 65.7, 'sd' => 2.6],
+                12 => ['median' => 74.0, 'sd' => 3.1],
+                18 => ['median' => 70.7, 'sd' => 3.1],
+                24 => ['median' => 85.0, 'sd' => 3.5],
+                30 => ['median' => 89.0, 'sd' => 3.6],
+                36 => ['median' => 94.0, 'sd' => 3.7],
+                42 => ['median' => 97.5, 'sd' => 3.8],
+                48 => ['median' => 101.0, 'sd' => 3.9],
+                54 => ['median' => 104.5, 'sd' => 4.0],
+                60 => ['median' => 108.0, 'sd' => 4.1],
             ]
         ];
     
