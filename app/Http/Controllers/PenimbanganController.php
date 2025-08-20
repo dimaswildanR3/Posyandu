@@ -466,23 +466,62 @@ $tinggiBadan = $dataPenimbangan->pluck('tb')->map(function ($tb) {
     
         $penimbangans = $query->orderBy('tanggal_timbang')->get();
     
-        // Ambil langsung umur dari field database
+        // Ambil langsung umur & berat badan dari DB
         $umur = $penimbangans->pluck('umur')->toArray();
         $berat = $penimbangans->pluck('bb')->map(fn($bb) => (float)$bb)->toArray();
     
-        $maxAge = max($umur) ?? 36;
+        $maxAge = !empty($umur) ? max($umur) : 36;
     
         $severelyUnderweight = [];
         $underweight = [];
         $normal = [];
         $overweight = [];
     
+        $jenisKelamin = $balita->jenis_kelamin;
+    
         for ($age = 0; $age <= $maxAge; $age++) {
-            $baseWeight = 3.3 + ($age * 0.5);
-            $severelyUnderweight[] = ['x' => $age, 'y' => max(2, $baseWeight - 2)];
-            $underweight[] = ['x' => $age, 'y' => $baseWeight - 1];
-            $normal[] = ['x' => $age, 'y' => $baseWeight + 1.5];
-            $overweight[] = ['x' => $age, 'y' => $baseWeight + 3];
+            // Ambil referensi WHO BB/U
+            $ref = $this->getBbuReference($age, $jenisKelamin);
+            $median = $ref['median'];
+            $sd = $ref['sd'];
+    
+            $severelyUnderweight[] = [
+                'x' => $age,
+                'y' => $median + (-3 * $sd)
+            ];
+            $underweight[] = [
+                'x' => $age,
+                'y' => $median + (-2 * $sd)
+            ];
+            $normal[] = [
+                'x' => $age,
+                'y' => $median + (1 * $sd)
+            ];
+            $overweight[] = [
+                'x' => $age,
+                'y' => $median + (2 * $sd)
+            ];
+        }
+    
+        // Tambahkan status gizi ke setiap hasil penimbangan
+        foreach ($penimbangans as $item) {
+            $ref = $this->getBbuReference($item->umur, $jenisKelamin);
+            $median = $ref['median'];
+            $sd = $ref['sd'];
+    
+            $z = ($item->bb - $median) / $sd;
+    
+            if ($z < -3) {
+                $item->status_gizi_bbu = 'Gizi Buruk';
+            } elseif ($z >= -3 && $z < -2) {
+                $item->status_gizi_bbu = 'Gizi Kurang';
+            } elseif ($z >= -2 && $z <= 1) {
+                $item->status_gizi_bbu = 'Gizi Normal / Baik';
+            } elseif ($z > 1 && $z <= 2) {
+                $item->status_gizi_bbu = 'Gizi Lebih';
+            } else {
+                $item->status_gizi_bbu = 'Gizi Lebih';
+            }
         }
     
         return view('timbangan.kms', compact(
@@ -492,18 +531,17 @@ $tinggiBadan = $dataPenimbangan->pluck('tb')->map(function ($tb) {
         ));
     }
     
+    
     public function kms1(Request $request)
     {
-        // Ambil user login
         $userId = auth()->id();
     
-        // Cari balita milik user ini
+        // Cari balita milik user
         $balita = \App\Models\Balita::where('user_id', $userId)->firstOrFail();
     
         $dari = $request->query('dari');
         $sampai = $request->query('sampai');
     
-        // Query penimbangan berdasarkan balita_id
         $query = \App\Models\Penimbangan::where('balita_id', $balita->id);
     
         if ($dari) {
@@ -515,32 +553,79 @@ $tinggiBadan = $dataPenimbangan->pluck('tb')->map(function ($tb) {
     
         $penimbangans = $query->orderBy('tanggal_timbang')->get();
     
-        // Ambil umur & berat dari database
         $umur = $penimbangans->pluck('umur')->toArray();
         $berat = $penimbangans->pluck('bb')->map(fn($bb) => (float)$bb)->toArray();
     
-      // Gunakan default 36 kalau tidak ada data umur
-      $maxAge = !empty($umur) ? max($umur) : 36;
+        $maxAge = !empty($umur) ? max($umur) : 36;
     
         $severelyUnderweight = [];
         $underweight = [];
         $normal = [];
         $overweight = [];
     
+        $jenisKelamin = $balita->jenis_kelamin;
+    
+        // Loop sesuai umur
         for ($age = 0; $age <= $maxAge; $age++) {
-            $baseWeight = 3.3 + ($age * 0.5);
-            $severelyUnderweight[] = ['x' => $age, 'y' => max(2, $baseWeight - 2)];
-            $underweight[] = ['x' => $age, 'y' => $baseWeight - 1];
-            $normal[] = ['x' => $age, 'y' => $baseWeight + 1.5];
-            $overweight[] = ['x' => $age, 'y' => $baseWeight + 3];
+            // Ambil referensi WHO sesuai umur & jenis kelamin
+            $ref = $this->getBbuReference($age, $jenisKelamin);
+    
+            $median = $ref['median'];
+            $sd = $ref['sd'];
+    
+            // Batas sesuai Z-Score WHO
+            $severelyUnderweight[] = [
+                'x' => $age,
+                'y' => $median + (-3 * $sd)
+            ];
+            $underweight[] = [
+                'x' => $age,
+                'y' => $median + (-2 * $sd)
+            ];
+            $normal[] = [
+                'x' => $age,
+                'y' => $median + (1 * $sd) // normal batas atas
+            ];
+            $overweight[] = [
+                'x' => $age,
+                'y' => $median + (2 * $sd)
+            ];
+        }
+    
+        // Tentukan status gizi tiap penimbangan
+        foreach ($penimbangans as $item) {
+            $ref = $this->getBbuReference($item->umur, $jenisKelamin);
+            $median = $ref['median'];
+            $sd = $ref['sd'];
+    
+            $z = ($item->bb - $median) / $sd;
+            if ($z < -3) {
+                $item->status_gizi_bbu = 'Gizi Buruk';
+            } elseif ($z >= -3 && $z < -2) {
+                $item->status_gizi_bbu = 'Gizi Kurang';
+            } elseif ($z >= -2 && $z <= 1) {
+                $item->status_gizi_bbu = 'Gizi Normal / Baik';
+            } elseif ($z > 1 && $z <= 2) {
+                $item->status_gizi_bbu = 'Gizi Lebih';
+            } else {
+                $item->status_gizi_bbu = 'Gizi Lebih';
+            }
         }
     
         return view('timbangan.kms', compact(
-            'balita', 'penimbangans', 'dari', 'sampai',
-            'umur', 'berat',
-            'severelyUnderweight', 'underweight', 'normal', 'overweight'
+            'balita',
+            'penimbangans',
+            'dari',
+            'sampai',
+            'umur',
+            'berat',
+            'severelyUnderweight',
+            'underweight',
+            'normal',
+            'overweight'
         ));
     }
+    
     
     
     public function filterCetak(Request $request)
