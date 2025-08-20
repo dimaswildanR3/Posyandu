@@ -114,16 +114,16 @@
             {{-- Legenda warna zona --}}
             <div class="d-flex flex-wrap gap-3 justify-content-center">
                 <div class="d-flex align-items-center gap-2">
-                    <div style="width:20px; height:20px; background-color:#e74a3b;"></div><small>Gizi Buruk (&lt; 8 kg)</small>
+                    <div style="width:20px; height:20px; background-color:#e74a3b;"></div><small>Gizi Buruk (&lt; 6 kg)</small>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <div style="width:20px; height:20px; background-color:#f6c23e;"></div><small>Gizi Kurang (8-10 kg)</small>
+                    <div style="width:20px; height:20px; background-color:#f6c23e;"></div><small>Gizi Kurang (6 – 7 kg)</small>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <div style="width:20px; height:20px; background-color:#1cc88a;"></div><small>Gizi Normal (10-13 kg)</small>
+                    <div style="width:20px; height:20px; background-color:#1cc88a;"></div><small>Gizi Normal (7 – 11 kg)</small>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <div style="width:20px; height:20px; background-color:#000;"></div><small>Gizi Lebih (&gt; 13 kg)</small>
+                    <div style="width:20px; height:20px; background-color:#000;"></div><small>Gizi Lebih (&gt; 11 kg)</small>
                 </div>
             </div>
         </div>
